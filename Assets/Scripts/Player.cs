@@ -257,14 +257,14 @@ public class Player : MonoBehaviour {
 	{
 		// did the player collide with a pickup?
 		// pickups and scoring will be added in an upcomming tutorial
-		/*if (other.gameObject.CompareTag("Pickup"))
+		if (other.gameObject.CompareTag("Pickup"))
 		{
 			if (other.GetComponent<Pickup>())
 			{
 				other.GetComponent<Pickup>().PickMeUp();
 				xa.sc.Pickup();
 			}
-		}*/
+		}
 	}
 	
 	void OnTriggerStay(Collider other)

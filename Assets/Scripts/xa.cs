@@ -7,7 +7,7 @@ using System.Collections;
 
 public class xa : MonoBehaviour {
 
-	//public static Scoring sc; // scoring will be added in an upcomming tutorial
+	public static Scoring sc; // scoring will be added in an upcomming tutorial
 
 	public static float orthSize;
 	public static float orthSizeX;
@@ -41,7 +41,7 @@ public class xa : MonoBehaviour {
 
 	public void Start()
 	{
-		//sc = (Scoring)(this.gameObject.GetComponent("Scoring")); // scoring will be added in an upcomming tutorial
+		sc = (Scoring)(this.gameObject.GetComponent("Scoring")); // scoring will be added in an upcomming tutorial
 
 		// gather information from the camera to find the screen size
 		xa.camRatio = 1.333f; // 4:3 is 1.333f (800x600) 
