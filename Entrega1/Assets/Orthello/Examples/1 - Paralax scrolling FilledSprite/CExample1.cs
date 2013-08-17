@@ -10,7 +10,7 @@
 using UnityEngine;
 using System.Collections;
 // Main Example 1 Demo class 
-
+/// <exclude />
 public class CExample1 : MonoBehaviour
 {
 

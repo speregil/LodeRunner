@@ -11,16 +11,10 @@
 // ------------------------------------------------------------------------
 using UnityEngine;
 using System.Collections;
-
-
+ 
+/// <exclude />
 public class CExample6 : MonoBehaviour {
-	
-	void Start()
-	{
-		// set gravity manually
-		Physics.gravity = new Vector3(0,-450,0);
-	}
-	
+
     // rotate a physical static object
     void Rotate(string name)
     {
@@ -33,6 +27,13 @@ public class CExample6 : MonoBehaviour {
     void DestroyWhenOutOfView(OTObject owner)
     {
         OT.DestroyObject(owner);
+    }
+	
+    // a collision occured
+    void CollisionOccured(OTObject owner)
+    {
+        //OT.print(owner.name + " collided with " + owner.collisionObject.name + " at " +
+			//owner.collision.contacts[0].point);			
     }
     
     float it = 0;   
@@ -73,11 +74,4 @@ public class CExample6 : MonoBehaviour {
         Rotate("rot_s2");
         Rotate("rot_s3");
     }
-	
-	void CollisionOccured(OTObject owner)
-	{
-		// a collision occured
-		//OT.print(owner.name+" collided with "+owner.collisionObject.name+" at "+owner.collision.contacts[0].point);
-	}
-	
 }

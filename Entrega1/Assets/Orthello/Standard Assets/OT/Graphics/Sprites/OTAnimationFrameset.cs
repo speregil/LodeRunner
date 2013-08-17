@@ -1,8 +1,6 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-
+ 
 /// <summary>
 /// Will store animation information about a sequence of <see cref="OTContainer" /> frames.
 /// </summary>
@@ -30,21 +28,6 @@ public class OTAnimationFrameset
     /// </summary>
     public string[] frameNames;
     /// <summary>
-    /// Get frame names from container using this mask
-    /// </summary>
-    /// <description>
-    /// Can be the name prefix or a regular expression
-    /// For example a value of '^(?i:(idle))' will get all 
-    /// frames that start with 'idle' and ignoring case.
-    /// When using a regular string value, the mask will
-    /// be validated as a case insensitive prefix
-    /// </description>
-    public string frameNameMask;
-    /// <summary>
-    /// If true, frame names will be sorted
-    /// </summary>
-    public bool sortFrameNames = true;
-   /// <summary>
     /// Frameset (start to end) play count
     /// </summary>
     public int playCount = 1;
@@ -83,42 +66,9 @@ public class OTAnimationFrameset
 
             int[] frames = new int[totalFrames];
             int start, end, direction;
-			
-			if (frameNameMask!="" && container!=null)
-			{
-				Regex regex = null;
-				
-				try
-				{
-					if ((frameNameMask[0] == '^' || frameNameMask[0] == '[' || frameNameMask[0] == '('))
-						regex = new Regex( @frameNameMask );
-				}
-				catch(System.Exception)
-				{
-					regex = null;
-				}
-				
-				List<string> names = new List<string>();
-				for (int f=0; f<container.frameCount; f++)
-				{
-					OTContainer.Frame fr = container.GetFrame(f);	
-					try
-					{
-						if ((regex!=null && regex.Match(fr.name).Success) || (fr.name.ToLower().StartsWith(frameNameMask.ToLower())))
-							names.Add(fr.name);															
-					}
-					catch(System.Exception)
-					{
-					}
-				}
-				frameNames = names.ToArray();
-			}
-			
+
             if (frameNames!=null && frameNames.Length > 0)
-            {								
-				if (sortFrameNames) 
-					System.Array.Sort(frameNames);
-								
+            {
                 start = 0;
                 end = frameNames.Length - 1;
                 direction = 1;
@@ -133,12 +83,8 @@ public class OTAnimationFrameset
 
             // Calculate a single play's worth of frames (this includes a ping pong)
             int frameIndex = 0;
-			
-			if (frames.Length<numFrames)
-				System.Array.Resize<int>(ref frames,numFrames);
-			
             for (int i = 0; i < numFrames; ++i)
-            {				
+            {
                 if (frameNames != null && frameNames.Length>0)
                     frames[i] = container.GetFrameIndex(frameNames[frameIndex]);
                 else
@@ -155,16 +101,12 @@ public class OTAnimationFrameset
                 System.Array.Reverse(frames, numFrames, numFrames - 2);
                 numFrames = numFrames + (numFrames - 2);
             }
-		
+
             // Now repeat that array copy for playCount times
-			if (playCount>1 && playCount<=10)
-			{				
-	            for (int i = 1; i < playCount; i++)
-	                System.Array.Copy(frames, 0, frames, i * numFrames, numFrames);
-			}
-			else
-				if (playCount>1)
-					Debug.LogWarning("AnimationFrameset "+name+" is set to played more than 10 times!");
+            for (int i = 2; i < playCount; ++i)
+            {
+                System.Array.Copy(frames, 0, frames, playCount * numFrames, numFrames);
+            }
 
             return frames;
         }
@@ -211,8 +153,7 @@ public class OTAnimationFrameset
             return c;
         }
     }
-	
-	int _frameCount = -1;
+
     /// <summary>
     /// Number of animation frames
     /// </summary>
@@ -220,21 +161,15 @@ public class OTAnimationFrameset
     {
         get
         {
-			if (Application.isPlaying)
-			{
-				if (_frameCount==-1)
-					_frameCount = frameCountPerPlay * playCount;
-				return _frameCount;
-			}
             return frameCountPerPlay * playCount;
         }
     }
 
-    
+    /// <exclude />
     [HideInInspector]
     public int startIndex = 0;
-	 
+	 /// <exclude />
     [HideInInspector]
     public string _containerName = "";
-	
+
 }   

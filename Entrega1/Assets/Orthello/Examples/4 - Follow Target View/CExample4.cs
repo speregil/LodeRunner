@@ -15,10 +15,10 @@
 using UnityEngine;
 using System.Collections;
 
-
+/// <exclude />
 public class CExample4 : MonoBehaviour {
 
-    
+    /// <exclude />
     public CMover4 moverPrototype = null;   // movesprite prototype
 
     bool initialized = false;               // intialization indicator
@@ -33,14 +33,15 @@ public class CExample4 : MonoBehaviour {
         // lets create 10 mover sprites
         for (int i = 0; i < 10; i++)
         {
-            OTSprite s = OT.CreateSprite("mover");
+            CMover4 mov = Instantiate(moverPrototype) as CMover4;
+            OTSprite s = mov.GetComponent<OTSprite>();
             // hook up onInput delegate to handle clicking on a mover
             s.onInput = OnInput;
         }
     }
 
     // Input handler
-    
+    /// <exclude />
     public void OnInput(OTObject owner)
     {
         // check if we clicked the left mouse button

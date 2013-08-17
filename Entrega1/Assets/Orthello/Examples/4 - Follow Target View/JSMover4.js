@@ -18,6 +18,7 @@
 // ------------------------------------------------------------------------
 
 /*
+
     // mover waypoint
     private var wayPoints:Array  = [ new Vector2(-729.00f,866.00f), new Vector2(-204.00f,866.00f),new Vector2(-204.00f, -540.00f), 
            new Vector2(247.00f ,-540.00f), new Vector2(247.00f,866.00f), new Vector2(757.00f,866.00f),
@@ -151,13 +152,12 @@
                 // intialize rotation variables
                 rotationTime = 0;
                 // determine rotation delta angle
-				rotationAngle = towardsRotation - fromRotation;
-				if (Mathf.Abs(rotationAngle)>90.1f)
-				{
-					if (rotationAngle<0) rotationAngle = 90;
-					  else rotationAngle = -90;
-				}
+                rotationAngle = -90;
+                if ((Mathf.Round(fromRotation)==270 && Mathf.Round(towardsRotation) == 0) ||
+                    (Mathf.Round(fromRotation)==180 && Mathf.Round(towardsRotation) == 270))
+                   rotationAngle = 90;
             }
         }
     }
+
 */

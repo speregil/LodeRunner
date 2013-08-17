@@ -24,7 +24,9 @@
 using UnityEngine;
 using System.Collections;
 
+/// <exclude />
 public class OTEaseCircIn : OTEase {
+    /// <exclude />
     public override float ease(float t, float b, float c, float d )
     {
         return -c * (Mathf.Sqrt(1 - (t /= d) * t) - 1) + b;

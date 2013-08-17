@@ -8,7 +8,7 @@
 // ------------------------------------------------------------------------
 using UnityEngine;
 using System.Collections;
-
+/// <exclude />
 public class CStar2 : MonoBehaviour {
 
     OTSprite sprite;                    // This star's sprite class
@@ -54,7 +54,7 @@ public class CStar2 : MonoBehaviour {
     // OnStay delegate is called when star enters (overlaps) another 'collidable' object
     // !IMPORTANT - This sprite's collidable setting has to be true otherwide
     // collision delegates will not be called
-    
+    /// <exclude />
     public void OnStay(OTObject owner)
     {
         // check if we entered another star and adjust color if we did
@@ -62,7 +62,7 @@ public class CStar2 : MonoBehaviour {
             sprite.material = OT.LookupMaterial("Star-stay");
     }
     // OnExit delegate is called when star no longer overlaps another 'collidable' object
-    
+    /// <exclude />
     public void OnExit(OTObject owner)
     {
         // check if we have left another star and adjust color if we did
@@ -72,7 +72,7 @@ public class CStar2 : MonoBehaviour {
     // OnCollision delegate is called when star collides with another 'collidable' object
     // HINT - OnEnter and OnCollision delegates are called exactly at the same time, the only
     // difference is their naming convention
-    
+    /// <exclude />
     public void OnCollision(OTObject owner)
     {
         // check if we collided with a top block and adjust our speed and rotation accordingly

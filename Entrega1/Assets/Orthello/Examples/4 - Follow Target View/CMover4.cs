@@ -15,7 +15,7 @@
 using UnityEngine;
 using System.Collections;
 
-
+/// <exclude />
 public class CMover4 : MonoBehaviour {
 
     // mover waypoint
@@ -91,7 +91,7 @@ public class CMover4 : MonoBehaviour {
     // In this example .. we could have used the default handler as well. And would be even
     // better as we do not need the owner object here. We will do that with the OnMouseExit
     // handler
-    
+    /// <exclude />
     public void _OnMouseEnter(OTObject owner)
     {
         owner.gameObject.renderer.material.SetColor("_TintColor", new Color(1, 0, 0));
@@ -102,7 +102,7 @@ public class CMover4 : MonoBehaviour {
     // behaviour script when it has a collider ( so always .. ) you must give your
     // Orthello OnMouseExit(OTObject owner) another name if you would like to use that.
     // In this case we dont need the OTObject so we use the default.
-    
+    /// <exclude />
     public void OnMouseExit()
     {
         gameObject.renderer.material.SetColor("_TintColor", new Color(.5f, .5f, .5f));
@@ -127,7 +127,7 @@ public class CMover4 : MonoBehaviour {
             }
             else
               // rotate sprite towards waypoint
-              sprite.rotation = fromRotation + rotationAngle * (rotationTime / rotationSpeed);			
+              sprite.rotation = fromRotation + rotationAngle * (rotationTime / rotationSpeed);
         }
         else
         {
@@ -137,7 +137,7 @@ public class CMover4 : MonoBehaviour {
             sprite.position += towards.normalized * speed * Time.deltaTime;
             // determine new movement vector
             Vector2 result = towardsPoint - sprite.position;
-									
+
             // if the normalized vectors do not match we have passed the next waypoint 
             if (!Vector2.Equals(result.normalized, towards.normalized))
             {
@@ -153,7 +153,6 @@ public class CMover4 : MonoBehaviour {
                     towardsPoint = wayPoints[wayPoint + 1];
                 else
                     towardsPoint = wayPoints[0];
-				
                 // keep current rotation value
                 fromRotation = sprite.rotation;
                 // determine next rotation value by rotating towards next waypoint
@@ -164,12 +163,10 @@ public class CMover4 : MonoBehaviour {
                 // intialize rotation variables
                 rotationTime = 0;
                 // determine rotation delta angle
-				rotationAngle = towardsRotation - fromRotation;
-				if (Mathf.Abs(rotationAngle)>90.1f)
-				{
-					if (rotationAngle<0) rotationAngle = 90;
-					  else rotationAngle = -90;
-				}
+                rotationAngle = -90;
+                if ((Mathf.Round(fromRotation)==270 && Mathf.Round(towardsRotation) == 0) ||
+                    (Mathf.Round(fromRotation)==180 && Mathf.Round(towardsRotation) == 270))
+                   rotationAngle = 90;
             }
         }
     }

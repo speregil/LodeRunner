@@ -12,18 +12,18 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+/// <exclude />
 public class CExample5 : MonoBehaviour {
 
-    
+    /// <exclude />
     public Texture greenStarsAnimation;     // texture with rotating star frames
-    
+    /// <exclude />
     public Texture walkingManAnimation;     // texture with walking man frames
-    
+    /// <exclude />
     public Texture whiteTile;               // Just a white wyrmtale tile
-    
+    /// <exclude />
     public GameObject stage1;               // stage1 menu itmem
-    
+    /// <exclude />
     public GameObject stage2;               // stage2 menu itmem
 
     bool initialized = false;           // initialization indicator
@@ -61,8 +61,6 @@ public class CExample5 : MonoBehaviour {
         // To create the animating star we first have to create the sprite sheet object that will 
         // hold our texture/animation frames
         OTSpriteSheet sheet = OT.CreateObject(OTObjectType.SpriteSheet).GetComponent<OTSpriteSheet>();
-	    //  Give our sheet a name
-	    sheet.name = "mySheet";
         // Assign texture
         sheet.texture = greenStarsAnimation;
         // Specify how many columns and rows we have (frames)
@@ -104,10 +102,6 @@ public class CExample5 : MonoBehaviour {
         star.startAtRandomFrame = true;
         // Lets auto-start this animation
         star.playOnStart = true;       
-		// start invisible and make visible when containers are ready.
-		star.visible = false;
-		star.name = "star";
-		star.spriteContainer = sheet;
 
         // INFO : This animation 'star' will be center (0,0) positioned and act as a prototype
         // to create more moveing and animating (additive) 'stars'.
@@ -188,9 +182,6 @@ public class CExample5 : MonoBehaviour {
         man.playOnStart = true;
         // Give our sprite a name
         man.name = "man";
-		// start invisible and make visible when containers are ready.
-		man.visible = false;
-		man.spriteContainer = sheet;
 
         // INFO : In this class Update() method, we will check the location of
         // the mouse pointer and play the corresponding direction animation
@@ -237,15 +228,10 @@ public class CExample5 : MonoBehaviour {
         // Initialize application once
         if (!initialized)
             Initialize();
-		
-		// if containers that were created are not ready yet, lets hold.
-		if (!OT.ContainersReady())
-			return;
-		
+
         switch (appMode)
         {
             case 1:
-				star.visible = true;
                 // we are in the star stage so increase star creation wait time
                 starTime += Time.deltaTime;
                 // check if we may create a new star
@@ -254,7 +240,7 @@ public class CExample5 : MonoBehaviour {
                     // Lets create one, reset the wait time
                     starTime = 0;
                     // Create a copy of out animating star
-                    OTAnimatingSprite newStar = OT.CreateSprite(star) as OTAnimatingSprite;
+                    OTAnimatingSprite newStar = Instantiate(star) as OTAnimatingSprite;
                     // Put this star in our active stars list
                     stars.Add(newStar);
                     // Give it a random size
@@ -263,7 +249,7 @@ public class CExample5 : MonoBehaviour {
                     newStar.position = new Vector2((Screen.width / 2) + newStar.size.x / 2,
                        ((Screen.height / 2) * -1) + newStar.size.y/2 + Random.value * (Screen.height - newStar.size.y));
                     // Calculate the depth (smaller stars to the back, bigger to the front)
-                    newStar.depth = (int)((1 / newStar.size.x)*100);
+                    // newStar.depth = (int)((1 / newStar.size.x)*100);
                     // Set material to additive
                     newStar.additive = true;
                     newStar.frameIndex = 0;
@@ -293,7 +279,6 @@ public class CExample5 : MonoBehaviour {
                 }
                 break;
             case 2:
-				man.visible = true;
                 // we are in the walking man stage so calculate a normalized vector from
                 // our man to the mouse pointer
                 Vector2 mouseVector = (OT.view.mouseWorldPosition - man.position).normalized;
@@ -301,23 +286,21 @@ public class CExample5 : MonoBehaviour {
                 float angle = Mathf.Atan2(mouseVector.x, mouseVector.y);
                 // Play the right frameset dependent on the angle
                 float part = 6.2f / 8;
-				string anim = "";
-                if (angle > -1 * (part / 2) && angle <= (part / 2)) anim = "up";
+                if (angle > -1 * (part / 2) && angle <= (part / 2)) man.PlayLoop("up");
                 else
-                    if (angle > -3 * (part / 2) && angle <= -1 * (part / 2)) anim = "upLeft";
+                    if (angle > -3 * (part / 2) && angle <= -1 * (part / 2)) man.PlayLoop("upLeft");
                     else
-                        if (angle > -5 * (part / 2) && angle <= -3 * (part / 2)) anim = "left";
+                        if (angle > -5 * (part / 2) && angle <= -3 * (part / 2)) man.PlayLoop("left");
                         else
-                            if (angle > -7 * (part / 2) && angle <= -5 * (part / 2)) anim = "downLeft";
+                            if (angle > -7 * (part / 2) && angle <= -5 * (part / 2)) man.PlayLoop("downLeft");
                             else
-                                if (angle > (part / 2) && angle <= 3 * (part / 2)) anim = "upRight";
+                                if (angle > (part / 2) && angle <= 3 * (part / 2)) man.PlayLoop("upRight");
                                 else
-                                    if (angle > 3 * (part / 2) && angle <= 5 * (part / 2)) anim = "right";
+                                    if (angle > 3 * (part / 2) && angle <= 5 * (part / 2)) man.PlayLoop("right");
                                     else
-                                        if (angle > 5 * (part / 2) && angle <= 7 * (part / 2)) anim = "downRight";
+                                        if (angle > 5 * (part / 2) && angle <= 7 * (part / 2)) man.PlayLoop("downRight");
                                         else
-                                            anim = "down";
-				man.PlayLoop(anim);
+                                            man.PlayLoop("down");
                 // adjust background scroll speed related to our mouse vector
                 back.scrollSpeed = mouseVector * 10;
                 break;

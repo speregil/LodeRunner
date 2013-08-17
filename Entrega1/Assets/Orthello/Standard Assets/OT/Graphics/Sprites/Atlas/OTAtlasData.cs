@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// Stores data of a specific OTSpriteAtlas frame.
+/// Stores data of a specific atlas frame.
 /// </summary>
 [System.Serializable]
 public class OTAtlasData
@@ -31,32 +31,4 @@ public class OTAtlasData
     /// atlas frame size
     /// </summary>
     public Vector2 frameSize = Vector2.zero;
-	
-	[HideInInspector]
-	public OTAtlasMetaData[] metaData;
-	
-	public void AddMeta(string key, string value)
-	{
-		if (metaData==null)
-			metaData = new OTAtlasMetaData[] {};
-		
-		System.Array.Resize<OTAtlasMetaData>(ref metaData, metaData.Length+1);
-		metaData[metaData.Length-1] = new OTAtlasMetaData();
-		metaData[metaData.Length-1].key = key;		
-		metaData[metaData.Length-1].value = value;				
-	}	
-	
-	public string GetMeta(string key)
-	{
-		if (metaData == null)
-			return "";		
-		for (int k=0; k<metaData.Length; k++)
-		{
-			if (metaData[k].key == key)
-				return metaData[k].value;
-		}	
-		return "";
-	}
-		
 }
-

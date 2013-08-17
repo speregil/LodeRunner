@@ -17,12 +17,15 @@
 // Main Example 4 Demo class
 // ------------------------------------------------------------------------
 
-/*
+    public var moverPrototype:JSMover4 = null;   // movesprite prototype
+
     private var initialized:boolean = false;               // intialization indicator
     private var zooming:boolean = false;                   // zooming indicator
     private var zoomSpeed:Number = 4f;                   // how fast do we zoom in/out
     private var zoomMin:Number = -2.5f;                  // Zoomed out value
     private var zoomMax:Number = -1f;                    // Zoomed in value
+
+/*
 
     // Create movers
     function CreateObjects()
@@ -30,7 +33,7 @@
         // lets create 10 mover sprites
         for (var i:int = 0; i < 10; i++)
         {
-            var mov:JSMover4 = OT.CreateSprite("mover").GetComponent("JSMover4");
+            var mov:JSMover4 = Instantiate(moverPrototype) as JSMover4;
             var s:OTSprite = mov.GetComponent("OTSprite");
             // tell sprite class to deliver callbacks
             s.InitCallBacks(this);

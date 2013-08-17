@@ -38,30 +38,23 @@ public class OTController {
             return _time;
         }
     }
-	/// <summary>
-	/// Gets the owner of this controller
-	/// </summary>
-    public Object owner
-    {
-        get
-        {
-            return _owner;
-        }
-    }
 
-    
-    protected Object _owner;
-    
+    /// <exclude />
+    protected object owner;
+    /// <exclude />
     protected string _name;
-    
+    /// <exclude />
     protected float deltaTime;
+    /// <exlude />
     protected float _time;
 
     List<Component> callBackTargets = new List<Component>();
 
-    
+    /// <exclude />
     protected bool CallBack(string handler, object[] param)
     {
+#if UNITY_FLASH
+#else
         for (int t = 0; t < callBackTargets.Count; t++)
         {
             MethodInfo mi = callBackTargets[t].GetType().GetMethod(handler);
@@ -71,6 +64,7 @@ public class OTController {
                 return true;
             }
         }
+#endif
         return false;
     }
 
@@ -81,9 +75,9 @@ public class OTController {
     /// </summary>
     /// <param name="owner">object that this controller will influence</param>
     /// <param name="name">controller name</param>
-    public OTController(Object owner, string name)
+    public OTController(object owner, string name)
     {
-        this._owner = owner;
+        this.owner = owner;
         this._name = name.ToLower();
     }
 
@@ -91,9 +85,9 @@ public class OTController {
     /// Sets the owner of this controller
     /// </summary>
     /// <param name="owner"></param>
-    public virtual void SetOwner(Object owner)
+    public virtual void SetOwner(object owner)
     {
-        this._owner = owner;
+        this.owner = owner;
     }
 
     /// <summary>
@@ -112,7 +106,7 @@ public class OTController {
     /// <param name="name">controller name</param>
     public OTController(string name)
     {
-        this._owner = null;
+        this.owner = null;
         this._name = name.ToLower();
     }
 
@@ -121,7 +115,7 @@ public class OTController {
     /// </summary>
     public OTController()
     {
-        this._owner = null;
+        this.owner = null;
         this._name = "OTController" + (++indexer);
     }
 
@@ -148,7 +142,7 @@ public class OTController {
     {
     }
 
-    
+    /// <exclude />
     public void Update(float pDeltaTime)
     {
         if (!initialized)

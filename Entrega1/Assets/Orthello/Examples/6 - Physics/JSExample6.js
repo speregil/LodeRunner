@@ -21,12 +21,6 @@
 // ------------------------------------------------------------------------
 
 /*
-function Start()
-{
-	// set gravity manually
-	Physics.gravity = new Vector3(0,-450,0);
-}
-
 // rotate a physical static object
 function Rotate(name:String)
 {
@@ -40,6 +34,14 @@ function OnOutOfView(owner:OTObject)
 {
     OT.DestroyObject(owner);
 }
+
+// a collision occured
+public function OnCollision(owner: OTObject)
+{
+   // OT.print(owner.name + " collided with " + owner.collisionObject.name + " at " +
+		//owner.collision.contacts[0].point);			
+}
+
 
 var it:Number = 0;
 
@@ -70,18 +72,12 @@ function Update () {
 
             sp.gameObject.rigidbody.mass = si;
             sp.position = new Vector2(-200 + Random.value * 400, 300);
-            sp.InitCallBacks(this);            
+            sp.InitCallBacks(this);
         }
     }
     Rotate("rot");
     Rotate("rot_s1");
     Rotate("rot_s2");
     Rotate("rot_s3");
-}
-
-public function OnCollision(owner: OTObject)
-{
-	// a collision occured
-	// OT.print(owner.name+" collided with "+owner.collisionObject.name+" at "+owner.collision.contacts[0].point);
 }
 */

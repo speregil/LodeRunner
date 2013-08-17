@@ -2,7 +2,7 @@
  * EASING EQUATIONS
  * 
  * Open source under the BSD License.
- * Copyright ï¿½ 2001 Robert Penner
+ * Copyright © 2001 Robert Penner
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following 
@@ -24,13 +24,13 @@
 using UnityEngine;
 using System.Collections;
 
-
+/// <exclude />
 public class OTEaseElasticInOut : OTEase
 {
     private float _2PI = Mathf.PI * 2;
     float p = 0;
     float a = 0;
-    
+    /// <exclude />
     public override float ease(float t, float b, float c, float d)
     {
         float s;
@@ -51,14 +51,14 @@ public class OTEaseElasticInOut : OTEase
         return a * Mathf.Pow(2, -10 * (t -= 1)) * Mathf.Sin((t * d - s) * _2PI / p) * .5f + c + b;
     }
 
-    
+    /// <exclude />
     public OTEaseElasticInOut()
     {
         this.a = 0;
         this.p = 0;
     }
 
-    
+    /// <exclude />
     public OTEaseElasticInOut(float a, float p)
     {
         this.a = a;

@@ -24,8 +24,10 @@
 using UnityEngine;
 using System.Collections;
 
+/// <exclude />
 public class OTEaseBounceOut : OTEase
 {
+    /// <exclude />
     public override float ease(float t, float b, float c, float d)
     {
         if ((t /= d) < (1 / 2.75f))

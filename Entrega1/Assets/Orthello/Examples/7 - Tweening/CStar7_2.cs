@@ -12,7 +12,7 @@
 using UnityEngine;
 using System.Collections;
 
-
+/// <exclude />
 public class CStar7_2 : MonoBehaviour
 {
 

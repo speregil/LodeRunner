@@ -21,7 +21,7 @@ public class OTObjectType {
     /// </summary>
     public static Dictionary<string, GameObject> lookup = new Dictionary<string, GameObject>();
 
-    
+    /// <exclude />
     public static string Sprite
     {
         get
@@ -29,7 +29,7 @@ public class OTObjectType {
             return "Sprite";
         }
     }
-    
+    /// <exclude />
     public static string FilledSprite
     {
         get
@@ -37,7 +37,7 @@ public class OTObjectType {
             return "FilledSprite";
         }
     }
-    
+    /// <exclude />
     public static string AnimatingSprite
     {
         get
@@ -45,7 +45,7 @@ public class OTObjectType {
             return "AnimatingSprite";
         }
     }
-    
+    /// <exclude />
     public static string Animation
     {
         get
@@ -53,7 +53,7 @@ public class OTObjectType {
             return "Animation";
         }
     }
-    
+    /// <exclude />
     public static string SpriteSheet
     {
         get
@@ -61,7 +61,7 @@ public class OTObjectType {
             return "SpriteSheet";
         }
     }
-    
+    /// <exclude />
     public static string SpriteBatch
     {
         get
@@ -69,7 +69,7 @@ public class OTObjectType {
             return "SpriteBatch";
         }
     }
-    
+    /// <exclude />
     public static string SpriteAtlas
     {
         get
@@ -78,45 +78,4 @@ public class OTObjectType {
         }
     }
 
-    public static string GradientSprite
-    {
-        get
-        {
-            return "GradientSprite";
-        }
-    }
-	
-    public static string TextSprite
-    {
-        get
-        {
-            return "TextSprite";
-        }
-    }
-	
-    public static string Scale9Sprite
-    {
-        get
-        {
-            return "Scale9Sprite";
-        }
-    }
-	
-    public static string ClippingAreaSprite
-    {
-        get
-        {
-            return "ClippingAreaSprite";
-        }
-    }
-	
-    public static string ClipSprite
-    {
-        get
-        {
-            return "ClipSprite";
-        }
-    }
-	
-	
 }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System;
-
+ 
 public class OTTimeCycle
 {    
     public delegate void CycleDelegate(OTTimeCycle cycle);

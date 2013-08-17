@@ -15,7 +15,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-
+/// <exclude />
 public class CBullet3 : MonoBehaviour {
 
     OTSprite sprite;                            // this bullet's sprite class
@@ -54,9 +54,8 @@ public class CBullet3 : MonoBehaviour {
             // lets clear the debree list.
             debree.Clear();
         }
-				
         // Update bullet position
-        sprite.position += (Vector2)sprite.yVector	* speed * Time.deltaTime;
+        sprite.position += (Vector2)sprite.transform.up	* speed * Time.deltaTime;
         // Destroy bullet as it moves out of view
         if (sprite.outOfView) 
           OT.DestroyObject(sprite);
@@ -66,7 +65,7 @@ public class CBullet3 : MonoBehaviour {
     // We will have to maintain a ignore debree list because if we dont,
     // this bullet can generate a 'recursive' exploding state that will
     // create LOTS and LOTS of debree, totaly hanging this application
-    
+    /// <exclude />
     public void AddDebree(OTAnimatingSprite debreeObject)
     {
         debree.Add(debreeObject);
@@ -75,7 +74,7 @@ public class CBullet3 : MonoBehaviour {
     // OnCollision delegate is called when this bullet collides with another 'collidable' object
     // !IMPORTANT - This sprite's collidable setting has to be true otherwide
     // collision delegates will not be called
-    
+    /// <exclude />
     public void OnCollision(OTObject owner)
     {
         // check if the asteroid we are colliding with is not in our

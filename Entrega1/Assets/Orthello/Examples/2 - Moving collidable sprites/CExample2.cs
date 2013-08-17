@@ -11,11 +11,12 @@
 // ------------------------------------------------------------------------
 using UnityEngine;
 using System.Collections;
-
+/// <exclude />
 public class CExample2 : MonoBehaviour {
-	    
+
+    /// <exclude />
     public OTSprite blockPrototype; // prototype to create blocks
-    
+    /// <exclude />
     public OTSprite starPrototype;  // prototype to create stars
 
     bool initialized = false;       // initialization indicator
@@ -53,7 +54,7 @@ public class CExample2 : MonoBehaviour {
                 // Set block's name
                 b.name = "top" + x;
                 // Link to parent
-                b.transform.parent = blocks.transform;				
+                b.transform.parent = blocks.transform;
             }
             // Calculate the vertical number of blocks for the current resolution
             c = (Screen.height - 50) / 85;
@@ -71,7 +72,7 @@ public class CExample2 : MonoBehaviour {
                 // Set block's name
                 b.name = "left" + x;
                 // Link block to parent
-                b.transform.parent = blocks.transform;				
+                b.transform.parent = blocks.transform;
             }
             // Create right vertical blocks
             for (int x = 0; x < c; x++)

@@ -21,6 +21,7 @@
 // ------------------------------------------------------------------------
 
 /*
+
 private var mode:int = 0;
 private var time:Number = 0;
 private var easeIdx:int = 0;
@@ -38,7 +39,7 @@ private var easings:Array =  [
 // Update is called once per frame
 function Update () {
     if (time == 0)
-        GameObject.Find("text-21").GetComponent("TextMesh").text = "Next easing will be : " + easings[easeIdx].GetType().ToString();
+        (GameObject.Find("text-21").GetComponent("TextMesh") as TextMesh).text = "Next easing will be : " + easings[easeIdx].GetType().ToString();
     time += Time.deltaTime;
     if (time > 3)
     {
@@ -64,4 +65,5 @@ function MoveStars()
             easeIdx = 0;
     }
 }
+
 */

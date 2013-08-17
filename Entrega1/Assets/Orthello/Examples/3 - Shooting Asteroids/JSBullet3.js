@@ -16,8 +16,9 @@
 // ------------------------------------------------------------------------
 // Bullet behaviour class
 // ------------------------------------------------------------------------
-
+ 
 /*
+
 private var sprite:OTSprite;                            // this bullet's sprite class
 private var app:JSExample3;                              // main application class
 
@@ -56,7 +57,7 @@ function Update () {
         debree = new Array();
     }
     // Update bullet position
-    sprite.position += sprite.yVector * speed * Time.deltaTime;
+    sprite.position += sprite.transform.up * speed * Time.deltaTime;
     // Destroy bullet as it moves out of view
     if (sprite.outOfView) 
       OT.DestroyObject(sprite);
@@ -77,7 +78,8 @@ public function AddDebree(debreeObject:OTAnimatingSprite)
 public function OnCollision(owner:OTObject)
 {
     // check if the asteroid we are colliding with is not in our
-    // ignore debree list.		
+    // ignore debree list.
+	
 	var found:boolean = false;
 	for (var i:int = 0; i<debree.length; i++)
 		if (debree[i] == owner.collisionObject)
@@ -94,4 +96,5 @@ public function OnCollision(owner:OTObject)
         app.Explode(owner.collisionObject, this);
     }
 }
+
 */

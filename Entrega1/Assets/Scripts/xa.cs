@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Pathfinding;
 
 // static class courtesy of Michael Todd http://twitter.com/thegamedesigner
 // This script is part of the tutorial series "Making a 2D game with Unity3D using only free tools"
@@ -7,69 +8,144 @@ using System.Collections;
 
 public class xa : MonoBehaviour {
 
-	//public static Scoring sc; // scoring will be added in an upcomming tutorial
+	public  LayerMask theGroundMask;
+	public  LayerMask theLadderAndRopeMask;
+	public  LayerMask theEnemyMask;
+
+	public static Scoring sc; // scoring will be added in an upcomming tutorial
 
 	public static float orthSize;
 	public static float orthSizeX;
 	public static float orthSizeY;
 	public static float camRatio;
-
-	public static bool blockedRight = false;
-	public static bool blockedLeft = false;
-	public static bool blockedUp = false;
-	public static bool blockedDown = false;
-
-	public static float playerHitboxX = 0.225f; // player x = 0.45
-	public static float playerHitboxY = 0.5f; // 0.5 is correct for ladders while player actual y = 0.6
-
-	public static bool isLeft;
-	public static bool isRight;
-	public static bool isUp;
-	public static bool isDown;
-	public static bool isShoot;
-
-	public static bool alive;
-	public static bool onLadder;
-	public static bool onRope;
-	public static bool falling;
-	public static bool shooting;
-
-	public static int facingDir = 1; // 1 = left, 2 = right, 3 = up, 4 = down
-	public enum anim { None, WalkLeft, WalkRight, RopeLeft, RopeRight, Climb, ClimbStop, StandLeft, StandRight, HangLeft, HangRight, FallLeft, FallRight , ShootLeft, ShootRight }
-
-	public static Vector3 glx;
-
+	
+	public static LayerMask groundMask;
+	public static LayerMask ladderAndRopeMask;
+	public static LayerMask enemyMask;
+	public void Awake()
+	{
+		groundMask = theGroundMask;
+		ladderAndRopeMask = theLadderAndRopeMask;
+		enemyMask = theEnemyMask;
+	}
 	public void Start()
 	{
-		//sc = (Scoring)(this.gameObject.GetComponent("Scoring")); // scoring will be added in an upcomming tutorial
+		sc = (Scoring)(this.gameObject.GetComponent("Scoring")); // scoring will be added in an upcomming tutorial
 
 		// gather information from the camera to find the screen size
 		xa.camRatio = 1.333f; // 4:3 is 1.333f (800x600) 
 		xa.orthSize = Camera.mainCamera.camera.orthographicSize;
 		xa.orthSizeX = xa.orthSize * xa.camRatio;
+	//	UpdateGridGraph();
 	}
-
-	public void Update() 
+/*	public static void UpdateGridGraph()
 	{
-		// these are false unless one of keys is pressed
-		isLeft = false;
-		isRight = false;
-		isUp = false;
-		isDown = false;
-		isShoot = false;
-
-		// keyboard input
-		if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) 
-		{ isLeft = true; }
-		if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) 
-		{ isRight = true; }
-
-		if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) 
-		{ isUp = true; }
-		if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) 
-		{ isDown = true; }
-
-		if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.E)) 
-		{ isShoot = true; }
+		GridGraph gridGraph = AstarPath.active.graphs[0] as GridGraph;
+		
+		MyGUO myGraphUpdateObject = new MyGUO(new Bounds(Vector3.zero, new Vector3(gridGraph.width,gridGraph.depth,0)), groundMask | ladderAndRopeMask);
+		AstarPath.active.UpdateGraphs (myGraphUpdateObject);
+	}*/
+	public static bool IsGroundBetween(Vector3 pos1, Vector3 pos2)
+	{
+		pos1.z = 0; pos2.z = 0;
+		return Physics.Linecast(pos1, pos2, groundMask.value);
+	}
+	
+	public void OnDrawGizmosSelected()
+	{
+		if(AstarPath.active && AstarPath.active.graphs != null && AstarPath.active.graphs.Length > 0)
+		{
+			MyGridGraph gg = (AstarPath.active.graphs[0] as MyGridGraph);
+			
+			if(gg.graphNodes.Length > 0)
+			{
+				for (int y = gg.depth-1; y >= 0; y--) 
+				{
+					for (int x = 0; x < gg.width; x++)
+					{	
+						MyGridNode node = gg.graphNodes[y*gg.width+x] as MyGridNode;
+						
+						if(node.isTrueWalkable && node.isFallLane)
+						{
+							Gizmos.color = new Color(1, 1, 0, 0.5F);
+							
+							Gizmos.DrawSphere((Vector3)node.position, 0.3f);
+						}
+						
+						else if(node.isTrueWalkable)
+						{
+							Gizmos.color = new Color(0, 1, 0, 0.5F);
+							
+							Gizmos.DrawSphere((Vector3)node.position, 0.3f);
+						}
+						
+						else if(node.isFallLane)
+						{
+							Gizmos.color = new Color(0, 0, 1, 0.5F);
+							
+							Gizmos.DrawSphere((Vector3)node.position,  0.3f);
+						}
+					}
+				}
+			}
 		}
+	}
 }
+/*
+class MyGUO : GraphUpdateObject {
+	private LayerMask raycastMask;
+ 	
+	public MyGUO(Bounds b, LayerMask mask) : base(b) {
+		raycastMask = mask;
+		updatePhysics = false;
+		modifyWalkability = true;
+	}
+	
+    public override void Apply (Node node) {
+		
+        //Keep the base functionality
+        base.Apply (node);
+		
+		// make node non-walkable by default
+        node.walkable = false;
+		
+		RaycastHit hit;
+		
+		//The position of a node is an Int3, convert it to world coordinate
+		Vector3 pos = new Vector3((float)node.position.x / 100f, (float)node.position.y / 100f, (float)node.position.z / 100f);
+		pos.z -= 1; // translate backward so we can raycast forward onto a tile
+		
+		// if hit a tile, check it's tag
+		if(Physics.Raycast(pos, Vector3.forward, out hit, 5f, raycastMask))
+		{
+			if(hit.transform.gameObject.tag == "Ground") // this node is ground. can't travel in it
+			{
+//				Debug.Log("Found direct ground at " + (node as GridNode).GetIndex());
+				node.walkable = false;
+			}
+			else if(hit.transform.gameObject.tag == "Ladder")
+			{
+				node.walkable = true;
+			}
+			else if(hit.transform.gameObject.tag == "Rope")
+			{
+				node.walkable = true;
+			}
+		}
+		else // didn't hit anything, so must be air.  Check if we can walk on the ground under this row
+		{
+			// check tile 1 row down.
+			pos.y -= 1;
+			if(Physics.Raycast(pos, Vector3.forward, out hit, 5f, raycastMask))
+			{
+				if(hit.transform.gameObject.tag == "Ground")
+				{
+					node.walkable = true;
+				}
+			}
+			pos.y += 1; // undo
+			
+		}
+    }
+}
+*/

@@ -9,7 +9,7 @@
 //
 // If you would like to test the JS examples or use the framework in combination
 // with Javascript coding, you will have to move the /Orthello/Standard Assets folder
-// to the / (root) using the Unity editor.
+// to the / (root).
 //
 // This code was commented to prevent compiling errors when project is
 // downloaded and imported using a package.
@@ -18,6 +18,7 @@
 // ------------------------------------------------------------------------
 
 /*
+
 private var sprite:OTSprite;        // This star's sprite class
 private var speed:Vector2 =         // Star movement speed / second
     new Vector2(150, 150);
@@ -109,4 +110,5 @@ public function OnCollision(owner:OTObject)
 						rotation *= -1;
 				}
 }
+
 */

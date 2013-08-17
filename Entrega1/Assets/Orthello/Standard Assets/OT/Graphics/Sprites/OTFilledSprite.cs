@@ -10,9 +10,9 @@ public class OTFilledSprite : OTSprite
     // Editor settings
     //-----------------------------------------------------------------------------
 
-    
+    /// <exclude />
     public Vector2 _fillSize = new Vector2(0, 0);
-    
+    /// <exclude />
     public Vector2 _scrollSpeed = new Vector2(0, 0);
 
     //-----------------------------------------------------------------------------
@@ -56,19 +56,10 @@ public class OTFilledSprite : OTSprite
     //-----------------------------------------------------------------------------
     // overridden subclass methods
     //-----------------------------------------------------------------------------
-    
+    /// <exclude />
     protected override void CheckSettings()
     {
-		Vector3 oldSize = size;
-
-		bool imageChanged = false;
-		if (image!=_image_)
-			imageChanged = true;
-				
-        base.CheckSettings();		
-		// if we changed the image, reset old size because it was set to dimensions of the new image
-		if (imageChanged) 
-			size = oldSize;
+        base.CheckSettings();
 
         if (fillSize != _fillSize_)
         {
@@ -84,52 +75,33 @@ public class OTFilledSprite : OTSprite
     {
         Clean();
     }
-    
-	public override void PassiveUpdate()
-	{
-		if (!scrollSpeed.Equals(Vector2.zero))
-			Update();
-	}
-	
+
+    /// <exclude />
     protected override string GetTypeName()
     {
         return "Filled Sprite";
     }
 
-    
+    /// <exclude />
     public override string GetMatName()
     {
-       return base.GetMatName() + "-Size:"+size.ToString()+"-fill:" + fillSize.ToString();
+       return base.GetMatName() + "-fill:" + fillSize.ToString();
     }
-	
-	protected override void Resized()
-	{
-		SetTexture();
-	}
-	
+
     void SetTexture()
     {
         if (image != null)
-        {			
+        {
             Material mat = material;
-			if (mat!=null)
-			{
-				Vector2  oldScale = mat.mainTextureScale;
-				Vector2  mainScale = Vector2.zero;
-	            if (fillSize.Equals(Vector2.zero) || Vector2.Equals(fillSize, size))
-	                mainScale = Vector2.one;
-	            else
-	                mainScale = new Vector2(1 / (fillSize.x / size.x), 1 / (fillSize.y / size.y));
-				if (mainScale!=oldScale)
-				{
-	            	mat.mainTextureScale = mainScale;
-	            	mat.mainTextureOffset = new Vector2(0, mat.mainTextureScale.y * -1);
-				}
-			}
+            if (fillSize.Equals(Vector2.zero) || Vector2.Equals(fillSize, size))
+                mat.mainTextureScale = Vector2.one;
+            else
+                mat.mainTextureScale = new Vector2(1 / (fillSize.x / size.x), 1 / (fillSize.y / size.y));
+            mat.mainTextureOffset = new Vector2(0, mat.mainTextureScale.y * -1);
         }
     }
 
-    
+    /// <exclude />
     protected override Material InitMaterial()
     {
         Material mat = base.InitMaterial();
@@ -137,7 +109,7 @@ public class OTFilledSprite : OTSprite
         return mat;
     }
 
-    
+    /// <exclude />
     protected override void Clean()
     {
         base.Clean();
@@ -148,10 +120,9 @@ public class OTFilledSprite : OTSprite
     // class methods
     //-----------------------------------------------------------------------------
 
-    
+    /// <exclude />
     protected override void Awake()
     {
-		passiveControl = true;
         _fillSize_ = fillSize;
         base.Awake();
     }
@@ -159,31 +130,21 @@ public class OTFilledSprite : OTSprite
 
     new void Start()
     {
+        useUV = false;
         base.Start();
     }
-	
- 	new void Update()
+    // Update is called once per frame
+    new void Update()
     {
-	
-		if (otTransform == null)
-			return;
-		
-		if (!_size_.Equals(new Vector2(otTransform.localScale.x,otTransform.localScale.y)))
-		{
-			isDirty = true;
-		}
-		
-		
-		if (!passive)
-        	base.Update();
-			
-		// scroll background
+        base.Update();
+
+        // scroll background
         if (!scrollSpeed.Equals(Vector2.zero))
         {
             Material mat = material;
-            float dx = ((1 / mat.mainTextureScale.x) * (size.x / fillSize.x / 10)) * scrollSpeed.x * Time.deltaTime;
-            float dy = ((1 / mat.mainTextureScale.y) * (size.y / fillSize.y / 10)) * scrollSpeed.y * Time.deltaTime;
-			
+            float dx = (1 / mat.mainTextureScale.x) * scrollSpeed.x * Time.deltaTime;
+            float dy = (1 / mat.mainTextureScale.y) * scrollSpeed.y * Time.deltaTime;
+
             float nx = mat.mainTextureOffset.x + dx;
             float ny = mat.mainTextureOffset.y + dy;
             if (dx < 0 && nx < 0) nx += 1;
@@ -193,6 +154,6 @@ public class OTFilledSprite : OTSprite
 
             mat.mainTextureOffset = new Vector2(nx, ny);
         }
-			
+
     }
 }

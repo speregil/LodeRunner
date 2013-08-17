@@ -6,13 +6,19 @@ using System.Collections;
 /// </summary>
 public class OTSpriteSheet : OTContainer
 {
-    
+    /// <exclude />
     public Vector2 _framesXY = Vector2.one;
-    
-    
+    /// <exclude />
+    public Vector2 _sheetSize = Vector2.zero;
+    /// <exclude />
     public Vector2 _frameSize = Vector2.zero;
+    /// <summary>
+    /// Spritesheet's texture
+    /// </summary>
+    public Texture texture;
 
     Vector2 _framesXY_ = Vector2.one;
+    Vector2 _sheetSize_ = Vector2.zero;
     Vector2 _frameSize_ = Vector2.zero;
 
     /// <summary>
@@ -36,7 +42,32 @@ public class OTSpriteSheet : OTContainer
             _framesXY = value;
             dirtyContainer = true;
         }
-    }   
+    }
+
+    /// <summary>
+    /// Original sheet size
+    /// </summary>
+    /// <remarks>
+    /// This setting is optional and only used in combination with frameSize when
+    /// the frames do not exactly fill up the texture horizontally and/or vertically.
+    /// <br></br><br></br>
+    /// Sometimes a sheet has some left over space to the right or bottom of the
+    /// texture that was used. By setting the original sheetSize and the frameSize, 
+    /// the empty left-over space can be calculated and taken into account when
+    /// setting the texture scaling and frame texture offsetting.
+    /// </remarks>
+    public Vector2 sheetSize
+    {
+        get
+        {
+            return _sheetSize;
+        }
+        set
+        {
+            _sheetSize = value;
+            dirtyContainer = true;
+        }
+    }
 
     /// <summary>
     /// Original frame size
@@ -63,8 +94,13 @@ public class OTSpriteSheet : OTContainer
         }
     }
 
+    /// <exclude />
+    override public Texture GetTexture()
+    {
+        return texture;
+    }
 
-    
+    /// <exclude />
     override protected Frame[] GetFrames()
     {
         if (framesXY.x == 0 || framesXY.y == 0)
@@ -119,20 +155,26 @@ public class OTSpriteSheet : OTContainer
     }
 
 
-    
+    /// <exclude />
     new protected void Start()
     {
         _framesXY_ = framesXY;
+        _sheetSize_ = sheetSize;
         _frameSize_ = frameSize;
         base.Start();
     }
 
-    
-    protected override void Update()
+    /// <exclude />
+    new protected void Update()
     {
         if (!Vector2.Equals(_framesXY, _framesXY_))
         {
             _framesXY_ = _framesXY;
+            dirtyContainer = true;
+        }
+        if (!Vector2.Equals(_sheetSize, _sheetSize_))
+        {
+            _sheetSize_ = _sheetSize;
             dirtyContainer = true;
         }
         if (!Vector2.Equals(_frameSize, _frameSize_))

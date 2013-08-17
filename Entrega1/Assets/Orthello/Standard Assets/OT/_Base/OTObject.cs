@@ -20,25 +20,25 @@ public class OTObject : MonoBehaviour
     /// </summary>
     public enum Pivot
     {
-        
+        /// <exclude />
         TopLeft,
-        
+        /// <exclude />
         Top,
-        
+        /// <exclude />
         TopRight,
-        
+        /// <exclude />
         Left,
-        
+        /// <exclude />
         Center,
-        
+        /// <exclude />
         Right,
-        
+        /// <exclude />
         BottomLeft,
-        
+        /// <exclude />
         Bottom,
-        
+        /// <exclude />
         BottomRight,
-        
+        /// <exclude />
         Custom
     };
 
@@ -92,36 +92,36 @@ public class OTObject : MonoBehaviour
         ///  use a Spherical collider object
         /// </summary>
         Sphere
-    };		
-	
+    };
+
     //-----------------------------------------------------------------------------
     // Editor settings
     //-----------------------------------------------------------------------------
-    
+    /// <exclude />
     public string _name = "";
-    
+    /// <exclude />
     public Vector2 _position = Vector2.zero;
-    
+    /// <exclude />
     public Vector2 _size = new Vector2(100, 100);
-    
+    /// <exclude />
     public float _rotation = 0;
-    
+    /// <exclude />
     public Pivot _pivot = Pivot.Center;
-    
+    /// <exclude />
     public Vector2 _pivotPoint = Vector2.zero;
-		    
+    /// <exclude />
     public bool _registerInput = false;
-    
+    /// <exclude />
     public int _depth = 0;
-    
+    /// <exclude />
     public bool _collidable = false;
-    
+    /// <exclude />
     public Physics _physics = Physics.Trigger;
-    
+    /// <exclude />
     public ColliderType _colliderType = ColliderType.Box;
-    
+    /// <exclude />
     public int _collisionDepth = 0;
-    
+    /// <exclude />
     public float _collisionSize = -1;
 
     /// <summary>
@@ -138,11 +138,11 @@ public class OTObject : MonoBehaviour
     /// </summary>
     [HideInInspector]
     public int dragButton = 0;
-    
+    /// <exclude />
     [HideInInspector]
     public bool init = true;	
 	
-    
+    /// <exclude />
     public Rect _worldBounds = new Rect(0, 0, 0, 0);
 
     /// <summary>
@@ -163,27 +163,10 @@ public class OTObject : MonoBehaviour
         set
         {
             _worldBounds = value;
-			position += new Vector2(0,0.00001f);
+            Update();
         }
     }
-	
-	
-	public Transform otTransform
-	{
-		get;
-		set;
-	}
-	public Renderer  otRenderer
-	{
-		get;
-		set;
-	}
-	public Collider  otCollider
-	{
-		get;
-		set;		
-	}
-	
+
     /// <summary>
     /// Check and handle setting changes while playing.
     /// </summary>   
@@ -205,105 +188,20 @@ public class OTObject : MonoBehaviour
             _dirtyChecks = value;
         }
     }
-		
-	Touch _dragTouch;
-	/// <summary>
-	/// Gets a value indicating whether this <see cref="OTObject"/> is dragging.
-	/// </summary>
-	/// <value>
-	/// <c>true</c> if is dragging; otherwise, <c>false</c>.
-	/// </value>
-	public Touch dragTouch
-	{
-		get
-		{
-			return _dragTouch;
-		}
-		set
-		{
-			_dragTouch = value;
-		}
-	}
-	
-	/// <summary>
-	/// data object for this sprite
-	/// </summary>
-	public object data;
 
-	/// <summary>
-	/// Gets or sets the depth at which this object will be dragged
-	/// </summary>
-	/// <value>
-	/// The drag depth.
-	/// </value>	
-	public int dragDepth
-	{
-		get
-		{
-			return _dragDepth;
-		}
-		set
-		{
-			_dragDepth = value;
-		}
-	}
-	
-	/// <summary>
-	/// Gets the y (up) vector for this sprite
-	/// </summary>
-	public Vector2 yVector
-	{
-		get
-		{
-			Vector2 _upVector = otTransform.up;
-			if (OT.world == OT.World.WorldTopDown2D)
-				_upVector = new Vector2(otTransform.up.x,otTransform.up.z);
-			return _upVector;
-		}
-	}
-	
-	/// <summary>
-	/// Gets the x (right) vector for this sprite
-	/// </summary>
-	public Vector2 xVector
-	{
-		get
-		{
-			Vector2 _upVector = otTransform.right;
-			if (OT.world == OT.World.WorldTopDown2D)
-				_upVector = new Vector2(otTransform.right.x,otTransform.right.z);
-			return _upVector;
-		}
-	}
-	
-	/// <summary>
-	/// Gets or sets the alpha value with which this object will be dragged
-	/// </summary>
-	/// <value>
-	/// The drag alpha value
-	/// </value>	
-	public float dragAlpha
-	{
-		get
-		{
-			return _dragAlpha;
-		}
-		set
-		{
-			_dragAlpha = value;
-		}
-	}
-		
     //-----------------------------------------------------------------------------
     // Fields
     //-----------------------------------------------------------------------------
-    
+    /// <exclude />
     [HideInInspector]
     public string protoType = "";
-    
+    /// <exclude />
     [HideInInspector]
     public string baseName = "";
-    
+    /// <exclude />
+    [HideInInspector]
+    public bool _isPrefab = false;
+
     //-----------------------------------------------------------------------------
     // Delegates
     //-----------------------------------------------------------------------------
@@ -311,20 +209,6 @@ public class OTObject : MonoBehaviour
     /// Is used to delegate a message from a specific owner object.
     /// </summary>
     public delegate void ObjectDelegate(OTObject owner);
-
-	/// <summary>
-	/// Called when this object is changed
-	/// </summary>
-	public ObjectDelegate onObjectChanged = null;
-	
-	/// <summary>
-	/// Called when this object is created
-	/// </summary>
-	public ObjectDelegate onCreateObject = null;
-	/// <summary>
-	/// Called when this object is destroyed
-	/// </summary>
-	public ObjectDelegate onDestroyObject = null;			
     /// <summary>
     /// Input control delegate
     /// </summary>
@@ -397,14 +281,6 @@ public class OTObject : MonoBehaviour
     /// To drag an object you must set <see cref="draggable" /> to true on the object that you want to drag.
     /// <see cref="dropTarget" /> will contain the sprite where this one was dropped upon.
     /// </remarks>
-    public ObjectDelegate onDragging = null;
-    /// <summary>
-    /// Is called when user is dragging an object
-    /// </summary>
-    /// <remarks>
-    /// To drag an object you must set <see cref="draggable" /> to true on the object that you want to drag.
-    /// <see cref="dropTarget" /> will contain the sprite where this one was dropped upon.
-    /// </remarks>
     public ObjectDelegate onDragEnd = null;
     /// <summary>
     /// Is called when another object is drag'n dropped on this object
@@ -458,35 +334,7 @@ public class OTObject : MonoBehaviour
     ///  this OTObject is overlapping another 'collidable' OTObject. 
     /// </remarks>
     public ObjectDelegate onStay = null;
-	
-	/// <summary>
-	/// True if someone clicked this sprite
-	/// </summary>
-	/// <remarks>
-	/// sprite.registerInput must be set to true for this setting to work.
-	/// </remarks>
-	public bool clicked
-	{
-		get
-		{
-			return OT.Clicked(this);
-		}
-	}
 
-	/// <summary>
-	/// True if the mouse is hovering over the sprite
-	/// </summary>
-	/// <remarks>
-	/// sprite.registerInput must be set to true for this setting to work.
-	/// </remarks>
-	public bool mouseHover
-	{
-		get
-		{
-			return OT.Over(this);
-		}
-	}	
-	
     //-----------------------------------------------------------------------------
     // public attributes (get/set)
     //-----------------------------------------------------------------------------
@@ -508,9 +356,6 @@ public class OTObject : MonoBehaviour
             string old = _name;
             _name = value;
             gameObject.name = _name;
-			
-			CheckName();
-			
             if (OT.isValid)
             {
                 _name_ = _name;
@@ -519,59 +364,6 @@ public class OTObject : MonoBehaviour
         }
     }
 
-	/// <summary>
-	/// Gets or sets the layer id of this object ( and its children )
-	/// </summary>
-	public int layer
-	{
-		get
-		{
-			return gameObject.layer;
-		}
-		set
-		{
-			gameObject.layer = value;
-			OTHelper.ChildrenSetLayer(gameObject,value);
-		}
-	}
-			
-	protected void Changed()
-	{
-		if (onObjectChanged!=null)
-			onObjectChanged(this);
-	}
-		
-	protected bool passiveControl = false;	
-	bool _setPassive;
-	void SetPassive()
-	{
-		_passive = _setPassive;
-		enabled = !passive;	
-		if (controllers.Count>0 || passiveControl)
-		{
-			if (enabled)
-				OT.NotControlling(this);
-			else
-				OT.Controlling(this);
-		}
-		if (isActive)
-			Update();
-	}
-	
-	bool _passive = false;
-	public bool passive
-	{
-		get
-		{
-			return _passive;
-		}
-		set
-		{
-			_setPassive = value;
-			Invoke("SetPassive",0.05f);			
-		}
-	}
-		
     /// <summary>
     /// Display depth of this object. -1000 (=front) to 1000 (=back)
     /// </summary>
@@ -588,12 +380,9 @@ public class OTObject : MonoBehaviour
         set
         {
             _depth = value;
-			if (OT.world != OT.World.WorldTopDown2D)
-            	otTransform.localPosition = new Vector3(otTransform.localPosition.x, otTransform.localPosition.y, paintingDepth);
-			else			
-            	otTransform.localPosition = new Vector3(otTransform.localPosition.x, paintingDepth, otTransform.localPosition.z);
+            _paintingDepth = depth + (position.y / 1000) + (position.x / 10000);
+            transform.position = new Vector3(transform.position.x, transform.position.y, _paintingDepth);
             SetCollider();
-			Changed();
         }
     }
 
@@ -681,19 +470,6 @@ public class OTObject : MonoBehaviour
         {
             if (!Vector2.Equals(value, _pivotPoint))
             {
-				if (otTransform == null)
-					otTransform = transform;
-				
-				if (otTransform.childCount>0)
-				{
-					Vector3 pv = _pivotPoint - value;
-					for (int i=0; i<otTransform.childCount; i++)
-					{
-						otTransform.GetChild(i).localPosition += pv;
-					}
-				}
-												
-				
                 Vector2 nOff = Vector2.Scale(_pivotPoint, size);
                 if (rotation != 0)
                 {
@@ -712,12 +488,9 @@ public class OTObject : MonoBehaviour
                 }
 
                 offset = _baseOffset;
+
                 position += nOff;
-                meshDirty = true;	
-				
-				if (passive)
-					Update();
-				
+                meshDirty = true;
             }
         }
     }
@@ -733,59 +506,20 @@ public class OTObject : MonoBehaviour
             return !OT.view.Contains(this);
         }
     }
-	
-	Rect GetRect(bool local)
-	{		
-		if (otRenderer==null)
-			InitComponents();
-		
-		Vector3 cb = otRenderer.bounds.center;
-		Vector3 ce = otRenderer.bounds.extents;
-		
-		if (local && otTransform.parent!=null)
-		{
-			Vector3 ex = otTransform.parent.worldToLocalMatrix.MultiplyPoint3x4(cb + ce);
-			cb = otTransform.parent.worldToLocalMatrix.MultiplyPoint3x4(cb);
-			ce = ex - cb;
-		}
-					
-        Rect r;
-		if (OT.world == OT.World.WorldTopDown2D)				
-		  r = new Rect(
-            cb.x - ce.x,
-            cb.z - ce.z,
-            (ce.x*2),
-            ce.z*2);
-		else
-		  r = new Rect(
-            cb.x - ce.x,
-            cb.y - ce.y,
-            (ce.x*2),
-            ce.y*2);
-		
-        return r;
-	}
-	
-    /// <summary>
-    /// This object's rectangle in world space
-    /// </summary>
-    public Rect worldRect
-    {
-        get
-        {
-			return GetRect(false);
-        }
-    }
-	
 
     /// <summary>
-    /// This object's rectangle in parents local space
+    /// This object's rectangle in world space
     /// </summary>
     public Rect rect
     {
         get
         {
-			return GetRect(true);
+            Rect r = new Rect(
+                renderer.bounds.center.x - (size.x / 2),
+                renderer.bounds.center.y + (size.y / 2),
+                size.x,
+                size.y * -1);
+            return r;
         }
     }
 
@@ -805,7 +539,6 @@ public class OTObject : MonoBehaviour
         set
         {
             _registerInput = value;
-			CheckInputCollidable();
             Update();
         }
     }
@@ -844,7 +577,6 @@ public class OTObject : MonoBehaviour
         set
         {
             _physics = value;
-			isDirty = true;
             Update();
         }
     }
@@ -861,7 +593,6 @@ public class OTObject : MonoBehaviour
         set
         {
             _colliderType = value;
-			isDirty = true;
             Update();
         }
     }
@@ -879,82 +610,6 @@ public class OTObject : MonoBehaviour
             return _collisionObject;
         }
     }
-
-	Vector2 dragStartPosition;
-	int restoreDepth;
-	float restoreAlpha;
-	public void HandleDrag(string dragCommand, OTObject dropped)
-	{
-		switch(dragCommand)
-		{
-			case "start":
-				_dropTarget = null;
-				dragStartPosition = position;
-				
-		        if (onDragStart != null)
-		            onDragStart(this);
-		        if (!CallBack("onDragStart", callBackParams))
-		            CallBack("OnDragStart", callBackParams);						
-			
-				// change depth and alpha
-				if (dragDepth>-1000 && dragDepth<1000)
-				{
-					restoreDepth = depth;
-					depth = dragDepth;
-				}		
-				if (this is OTSprite)
-				{
-					restoreAlpha = (this as OTSprite).alpha;
-					(this as OTSprite).alpha = dragAlpha;
-				}
-			
-			break;
-			
-			case "end":
-			
-				_dropTarget = OT.ObjectUnderPoint(Input.mousePosition, new OTObject[]{}, new OTObject[]{this} );								
-				if (_dropTarget==null)
-					_dropTarget = OT.ObjectUnderPoint(OT.view.camera.WorldToScreenPoint(otTransform.position), new OTObject[]{}, new OTObject[]{this} );								
-						
-	            if (onDragEnd != null)
-	                onDragEnd(this);
-	            if (!CallBack("onDragEnd", callBackParams))
-	                CallBack("OnDragEnd", callBackParams);				
-			
-				// restore depth and alpha
-				if (dragDepth>-1000 && dragDepth<1000)
-					depth = restoreDepth;
-				if (this is OTSprite)
-					(this as OTSprite).alpha = restoreAlpha;
-			
-				if (_dropTarget!=null && _dropTarget.onReceiveDrop!=null)
-					_dropTarget.HandleDrag("receive", this);										
-						
-			break;
-
-			case "receive":	
-				dragStartPosition = position;
-				_dropTarget = dropped;			
-	            if (onReceiveDrop != null)
-	                onReceiveDrop(this);
-	            if (!CallBack("onReceiveDrop", callBackParams))
-	                CallBack("OnReceiveDrop", callBackParams);							
-			
-				if (dropTarget==null)
-					dropped.dropTarget = null;
-			
-			break;
-			
-			
-			case "drag":
-	            if (onDragging != null)
-	                onDragging(this);					
-	            if (!CallBack("onDragging", callBackParams))
-	                CallBack("OnDragging", callBackParams);							
-			break;
-			
-		}
-	}
 	
     /// <summary>
     /// Current collision
@@ -999,33 +654,8 @@ public class OTObject : MonoBehaviour
         {
             return _dropTarget;
         }
-		set
-		{
-			if (value == null)
-			{
-				_dropTarget = value;
-				// dropTarget has been invalidated so set to original position
-				position = dragStartPosition;
-			}			
-		}
     }
 
-	
-	float paintingDepth
-	{
-		get
-		{
-			float _paintingDepth = 0;
-			float dv=1;
-			if (OT.world3D && transform.parent!=null)
-				dv = 100;				
-			_paintingDepth = (OT.world == OT.World.WorldTopDown2D)?-depth:(float)depth/dv;
-			if (OT.painterAlgorithm)
-				_paintingDepth += pd();
-			return _paintingDepth;
-		}		
-	}
-	
     /// <summary>
     /// Position (x/y) in pixels
     /// </summary>
@@ -1037,22 +667,13 @@ public class OTObject : MonoBehaviour
     {
         get
         {
-            if (otTransform != null)
-			{
-				if (otTransform.parent!=null)
-                	return new Vector2(otTransform.localPosition.x - offset.x, (OT.world == OT.World.WorldTopDown2D)?otTransform.localPosition.z - offset.y:otTransform.localPosition.y + offset.y);
-				else
-                	return new Vector2(otTransform.position.x - offset.x, (OT.world == OT.World.WorldTopDown2D)?otTransform.position.z - offset.y:otTransform.position.y + offset.y);
-			}
+            if (transform != null)
+                return new Vector2(transform.position.x - offset.x, transform.position.y + offset.y);
             else
                 return Vector2.zero;
         }
         set
         {
-			
-			if (otTransform == null)
-				otTransform = transform;
-
             Vector2 pos = value;
             if (worldBounds.width != 0)
             {
@@ -1062,106 +683,14 @@ public class OTObject : MonoBehaviour
                 float maxY = _worldBounds.yMax;
                 pos.x = Mathf.Clamp(pos.x, minX, maxX);
                 pos.y = Mathf.Clamp(pos.y, minY, maxY);
-            }					
-						
-			if (OT.world == OT.World.WorldTopDown2D)
-            	otTransform.localPosition = new Vector3(pos.x + offset.x, paintingDepth, pos.y - offset.y);
-			else
-            	otTransform.localPosition = new Vector3(pos.x + offset.x, pos.y - offset.y, paintingDepth);
-									
+            }
+            _paintingDepth = depth + (pos.y / 1000) + (pos.x / 10000);
+            transform.position = new Vector3(pos.x + offset.x, pos.y - offset.y, _paintingDepth);
             _position = pos;
             _position_ = pos;
-			Changed();
-			
         }
     }
-	
-	/// <summary>
-	/// Activates this object
-	/// </summary>
-	public void Activate()
-	{
-#if UNITY_3_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5										
-		gameObject.SetActiveRecursively(true);
-#else
-		gameObject.SetActive(true);
-#endif		
-	}
-	
-	/// <summary>
-	/// Deactivates this object
-	/// </summary>
-	public void Deactivate()
-	{
-#if UNITY_3_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5										
-		gameObject.SetActiveRecursively(false);
-#else
-		gameObject.SetActive(false);
-#endif		
-	}
 
-	/// <summary>
-	/// True if this object is active
-	/// </summary>
-	public bool isActive
-	{
-		get
-		{
-#if UNITY_3_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5										
-		return gameObject.active;
-#else
-		return gameObject.activeSelf;
-#endif								
-		}
-	}
-	
-	
-	protected virtual void Resized()
-	{
-	}
-	
-	/// <summary>
-	/// Gets the size of this object in world coordinates
-	/// </summary>
-	public Vector2 worldSize
-	{
-		get
-		{
-			if (otTransform.parent==null)
-				return size;
-			else
-				return toWorld(size) - (Vector2)otTransform.parent.position;				
-		}
-		set
-		{
-			if (otTransform.parent==null)
-				size = value;
-			else
-				size = fromWorld((Vector2)otTransform.parent.position + value);
-		}		
-	}
-	
-	
-	/// <summary>
-	/// Gets the position of this object in world coordinates
-	/// </summary>
-	public Vector2 worldPosition
-	{
-		get
-		{
-			if (otTransform.parent==null)
-				return position;
-			else
-				return toWorld(this.position);
-		}
-		set
-		{
-			if (otTransform.parent==null)
-				position = value;
-			else
-				position = fromWorld(value);
-		}
-	}
     /// <summary>
     /// Size (x/y) in pixels
     /// </summary>
@@ -1169,38 +698,36 @@ public class OTObject : MonoBehaviour
     {
         get
         {
-            if (otTransform != null)
-               	return new Vector2(otTransform.localScale.x, otTransform.localScale.y);
+            if (transform != null && !objectParent)
+                return new Vector2(transform.localScale.x, transform.localScale.y);
             else
-              return Vector2.zero;
+                if (objectParent)
+                    return _size;
+                else
+                    return Vector2.zero;
         }
         set
         {
-			if (otTransform==null)
-				InitComponents();
-			
             float x = value.x;
             float y = value.y;
             if (OT.view.customSize == 0)
             {
                 if (x < 1 || y < 1)
                 {
-                    value = new Vector2((x < 0) ? 1 : x, (y < 0) ? 1 : y);
+                    value = new Vector2((x <= 0) ? 1 : x, (y <= 0) ? 1 : y);
                 }
             }
-						
-           	otTransform.localScale = new Vector3(value.x, value.y, 1 );
+            if (!objectParent)
+                transform.localScale = new Vector3(value.x, value.y, 1 * OT.view.sizeFactor);
+            else
+                meshDirty = true;
             _size = value;
             _size_ = value;
-			if (oSize.Equals(Vector2.zero))
-            	oSize = _size;
-			
-			Resized();
-			Changed();
-			
+            oSize = _size;
+            Clean();
         }
     }
-	
+
     /// <summary>
     /// Rotation in degrees
     /// </summary>
@@ -1212,199 +739,38 @@ public class OTObject : MonoBehaviour
     {
         get
         {
-			if (otTransform == null)
-				otTransform = transform;
-			if (OT.world == OT.World.WorldTopDown2D)
-				return otTransform.localRotation.eulerAngles.y - offsetRotation;
-			else
-				return otTransform.localRotation.eulerAngles.z - offsetRotation;
+            if (transform != null)
+            {
+                float val = transform.rotation.eulerAngles.z - offsetRotation;
+                //if (val < 0.001f) val = 0;
+                return val;
+            }
+            else
+                return 0;
         }
         set
         {
-			if (otTransform == null)
-				otTransform = transform;
             float val = value;
             // keep this rotation within 0-360
             if (val < 0) val += 360.0f;
             else
                 if (val >= 360) val -= 360.0f;
-			if (OT.world == OT.World.WorldTopDown2D)
-            	otTransform.localRotation = Quaternion.Euler(90, val + offsetRotation, 0);
-			else
-            	otTransform.localRotation = Quaternion.Euler(0, 0, val + offsetRotation);
+            transform.rotation = Quaternion.Euler(0, 0, val + offsetRotation);
             _rotation = val;
-			Changed();
         }
     }
-	
-	
-	/// <summary>
-	/// Inidcates if this sprite has a mesh
-	/// </summary>
-	public bool hasMesh
-	{
-		get
-		{
-			return (mesh!=null);
-		}
-	}
 
-	/// <summary>
-	/// The uv coordinates of this sprite
-	/// </summary>
+    /// <exclude />
     public Vector2[] uv
     {
         get
         {
             if (mesh != null)
                 return mesh.uv;
-			else
-				OT.print("mesh of "+name+" == null");
             return null;
         }
     }
-		
-	/// <summary>
-	/// the mesh colors of this sprite
-	/// </summary>
-	public Color[] colors
-	{
-		get
-		{		
-			
-			if (mesh.colors.Length==0)
-			{
-				Color[] colors = new Color[]{};
-				System.Array.Resize<Color>(ref colors, mesh.vertices.Length);
-				for (int i=0; i<mesh.vertices.Length;i++)
-					colors[i] = Color.white;
-				mesh.colors = colors;
-			}				
-			return mesh.colors;
-		}
-		set
-		{
-			mesh.colors = value;
-		}
-	}
-	
-	public virtual void _IMsg(string cmd)
-	{
-	}
-	
-	bool batched = false;
-	public string _iMsg
-	{
-		set
-		{
-			switch(value)
-			{
-			case "batched": 
-				batched = true; 
-				_visible = otRenderer.enabled;
-				break;
-			case "!batched": 
-				batched = false; 
-				break;
-			case "visible":
-				_visible = true;
-				break;
-			case "!visible":
-				_visible = false;
-				break;
-			case "hide":
-				if (otRenderer.enabled)
-					otRenderer.enabled = false;
-				break;
-			case "show":
-				if (visible)
-					otRenderer.enabled = true;
-				break;
-			default:
-				_IMsg(value);
-				break;
-			}
-		}
-	}
-		
-    protected List<Renderer> hiddenRenderers = new List<Renderer>();
-    protected List<OTSprite> hiddenSprites = new List<OTSprite>();
-	bool _visible = true;
-	
-	void SetChildrenInvisible()
-	{
-		hiddenRenderers.Clear();
-        Renderer[] renderers = gameObject.GetComponentsInChildren<Renderer>();
-        for (int r = 0; r < renderers.Length; r++)
-        {
-			if (batched)
-			{
-				OTSprite sprite = renderers[r].gameObject.GetComponent<OTSprite>();
-				if (sprite!=null)
-				{
-					hiddenSprites.Add(sprite);
-					sprite._iMsg = "!visible";
-					sprite.Changed();
-				}
-				else
-				{
-					if (renderers[r].enabled)
-					{
-                    	hiddenRenderers.Add(renderers[r]);
-			   			renderers[r].enabled = false;
-					}
-				}
-			}
-			else
-			{
-				if (renderers[r].enabled)
-				{
-                	hiddenRenderers.Add(renderers[r]);								
-			   		renderers[r].enabled = false;							
-				}
-			}
-        }
-	}
 
-	void SetChildrenVisible()
-	{
-        if (hiddenRenderers.Count > 0 || hiddenSprites.Count>0)
-        {
-			if (batched)
-			{
-                for (int s = 0; s < hiddenSprites.Count; s++)
-				{
-                    hiddenSprites[s]._iMsg = "visible";
-					hiddenSprites[s].Changed();
-				}
-				hiddenSprites.Clear();
-			}							
-            for (int r = 0; r < hiddenRenderers.Count; r++)
-                hiddenRenderers[r].enabled = true;
-            hiddenRenderers.Clear();
-        }
-		else
-		{
-            Renderer[] renderers = gameObject.GetComponentsInChildren<Renderer>();
-            for (int r = 0; r < renderers.Length; r++)
-			{
-				if (batched)
-				{
-					OTSprite sprite = renderers[r].gameObject.GetComponent<OTSprite>();
-					if (sprite!=null)
-					{
-						sprite._iMsg = "visible";
-						sprite.Changed();
-					}
-					else
-						renderers[r].enabled = true;
-				}
-				else
-                	renderers[r].enabled = true;
-			}
-		}
-	}
-	
     /// <summary>
     /// Hides and shows an Orthello object
     /// </summary>
@@ -1415,70 +781,76 @@ public class OTObject : MonoBehaviour
     {
         get
         {
-			if (batched)
-				return _visible;			
-            return otRenderer.enabled;
+            return renderer.enabled;
         }
         set
-        {			
-			if (!value && (this is OTSprite) && (this as OTSprite).isInvalid)
-				(this as OTSprite).IsValid();
-			
-            if (value != visible)
+        {
+            if (value != renderer.enabled)
             {
-				if (batched)
-					_visible = value;	
-				else
-					otRenderer.enabled = value;
-				
-				if (otTransform.childCount > 0)
-				{					
-	                if (!value)
-						SetChildrenInvisible();
-	                else
-						SetChildrenVisible();
-				}
+                renderer.enabled = value;
+                if (!value)
+                {
+                    if (transform.childCount > 0)
+                    {
+                        Renderer[] renderers = gameObject.GetComponentsInChildren<Renderer>();
+                        for (int r = 0; r < renderers.Length; r++)
+                        {
+                            hiddenChildren.Add(renderers[r].gameObject);
+                            renderers[r].enabled = false;
+                        }
+                    }
+                }
+                else
+                {
+                    if (hiddenChildren.Count > 0)
+                    {
+                        for (int r = 0; r < hiddenChildren.Count; r++)
+                            hiddenChildren[r].renderer.enabled = true;
+                        hiddenChildren.Clear();
+                    }
+                }
             }
-			Changed();			
         }
     }
-	
+
     //-----------------------------------------------------------------------------
     // private and protected fields
     //-----------------------------------------------------------------------------
-    
+    /// <exclude />
     protected int _collisionDepth_ = 0;
-    
+    /// <exclude />
     protected float _collisionSize_ = 0.4f;
-    
+    /// <exclude />
     protected string _name_ = "";
-    
+    /// <exclude />
+    protected bool objectParent = false;
     bool _registerInput_ = false;
     bool _collidable_ = false;
     Physics _physics_ = Physics.Trigger;
     ColliderType _colliderType_ = ColliderType.Box;
     Pivot _pivot_ = Pivot.Center;
     Vector2 _pivotPoint_ = Vector2.zero;
-    
+    /// <exclude />
     protected bool isCopy = false;
-    
-	// oSize is original (current) sprite size
+    List<GameObject> hiddenChildren = new List<GameObject>();
+    /// <exclude />
     [HideInInspector]
     public Vector2 oSize;
-    
+
+    /// <exclude />
     Vector2 _position_ = Vector2.zero;
-	int _dragDepth = 9999;
-	float _dragAlpha = 1;
-    
+    /// <exclude />
     protected Vector2 _size_ = new Vector2(100, 100);
-    
+    /// <exclude />
     float _rotation_ = 0;
-    
+    float _paintingDepth = 0;
+    /// <exclude />
     protected object[] callBackParams;
-	    
+
+    /// <exclude />
     [HideInInspector]
     public Vector2 imageSize = Vector2.zero;
-    
+    /// <exclude />
     protected Vector2 offset
     {
         get
@@ -1488,7 +860,7 @@ public class OTObject : MonoBehaviour
         set
         {
             _baseOffset = value;
-            Vector2 nOffset = value;						
+            Vector2 nOffset = value;
             if (!Vector2.Equals(Vector2.zero, imageSize) && !Vector2.Equals(size, imageSize))
             {
                 float off = pivotPoint.x + 0.5f;
@@ -1509,25 +881,26 @@ public class OTObject : MonoBehaviour
             _offset = nOffset;
         }
     }
-    
+    /// <exclude />
     [HideInInspector]
     public Vector2 _offset = Vector2.zero;
-    
+    /// <exclude />
     [HideInInspector]
     public Vector2 _baseOffset = Vector2.zero;
-    
+    /// <exclude />
     protected float offsetRotation = 0;
 
-    
+    /// <exclude />
     bool _dirtyChecks = false;
-    
+    /// <exclude />
     protected Mesh mesh;
-    
+    /// <exclude />
     protected bool meshDirty = false;
-    
+    /// <exclude />
     protected bool isDirty = false;
-    
+    /// <exclude />
     protected OTObject _dropTarget = null;
+    bool isDragging = false;
 
     Vector2 _hitPoint;
     OTObject _collisionObject = null;
@@ -1535,36 +908,13 @@ public class OTObject : MonoBehaviour
     List<Component> callBackTargets = new List<Component>();
     int _depth_ = 0;
 
-    
+    /// <exclude />
     protected bool inView = true;
 
     private List<OTController> controllers = new List<OTController>();
     private Dictionary<System.Type, OTController> controllerLookupType = new Dictionary<System.Type, OTController>();
     private Dictionary<string, OTController> controllerLookupName = new Dictionary<string, OTController>();
-	
-	protected Vector3[] TranslatePivotVerts(Mesh mesh, Vector3[] verts)
-	{
-        mesh.vertices = verts;		
-        mesh.RecalculateBounds();
 
-		Bounds bo = mesh.bounds;
-		Matrix4x4 mx = new Matrix4x4();
-		
-		Vector2 ext = bo.extents;
-		Vector2 cen = -bo.center;
-		
-		Vector2 vdx = cen +
-			new Vector2( (ext.x * 2) * -pivotPoint.x ,
-					 (ext.y * 2) * -pivotPoint.y);
-								
-		mx.SetTRS( vdx ,Quaternion.identity,Vector3.one);		
-		for (int i=0; i<verts.Length; i++)
-			verts[i] = mx.MultiplyPoint3x4(verts[i]);
-		
-		return verts;				
-	}
-	
-	
     // -----------------------------------------------------------------
     // virtual methods
     // -----------------------------------------------------------------
@@ -1586,40 +936,40 @@ public class OTObject : MonoBehaviour
         return "Object";
     }
 
-    protected void SetCollider()
+    void SetCollider()
     {
-        if (mesh == null)
+        if (physics == Physics.Custom)
             return;
-		
+
         if (colliderType == ColliderType.Box)
         {
             BoxCollider b = GetComponent<BoxCollider>();
             if (b != null)
             {
-				if (physics != Physics.Custom)
-				{
-	                b.size = new Vector3(
-						(mesh.bounds.extents.x*2),
-						(mesh.bounds.extents.y*2), collisionSize);
-					Vector2 p = (pivotPoint * -1); 
-					p.x *= (mesh.bounds.extents.x * 2);
-					p.y *= (mesh.bounds.extents.y * 2);
-	                b.center = new Vector3(p.x, p.y, collisionDepth - depth);
-	                b.isTrigger = true;
-	                if (collidable)
-	                {
-	                    if (physics == Physics.Trigger)
-	                        b.isTrigger = true;
-	                    else
-	                        b.isTrigger = false;
-	                }
-	                else
-	                {
-	                    b.isTrigger = false;
-	                }
-				}
-				else
-	                b.center = new Vector3(b.center.x, b.center.y, collisionDepth - depth);
+                if (collidable)
+                {
+                    if (b.size.x == 0 || b.size.y == 0)
+                        b.size = new Vector3(1, 1, collisionSize);
+                    else
+                        b.size = new Vector3(b.size.x, b.size.y, collisionSize);
+                    b.center = (pivotPoint * -1);
+                    b.center += new Vector3(0, 0, collisionDepth - depth);
+                    b.isTrigger = true;
+
+                    if (physics == Physics.Trigger)
+                        b.isTrigger = true;
+                    else
+                        b.isTrigger = false;
+                }
+                else
+                {
+                    if (b.size.x == 0 || b.size.y == 0)
+                        b.size = new Vector3(1, 1, 0);
+                    else
+                        b.size = new Vector3(b.size.x, b.size.y, 0);
+                    b.center = pivotPoint * -1;
+                    b.isTrigger = false;
+                }
             }
 
         }
@@ -1628,28 +978,24 @@ public class OTObject : MonoBehaviour
             SphereCollider s = GetComponent<SphereCollider>();
             if (s != null)
             {
-				if (physics != Physics.Custom)
-				{
-	                if (s.radius == 0)
-	                    s.radius = 0.5f;
-	                if (collidable)
-	                {
-	                    s.center = (pivotPoint * -1);
-	                    s.center += new Vector3(0, 0, collisionDepth - depth);
-	                    s.isTrigger = true;	
-	                    if (physics == Physics.Trigger)
-	                        s.isTrigger = true;
-	                    else
-	                        s.isTrigger = false;
-	                }
-	                else
-	                {
-	                    s.center = pivotPoint * -1;
-	                    s.isTrigger = false;
-	                }
-				}
-				else
-	               s.center += new Vector3(s.center.x, s.center.y, collisionDepth - depth);
+                if (s.radius == 0)
+                    s.radius = 0.5f;
+                if (collidable)
+                {
+                    s.center = (pivotPoint * -1);
+                    s.center += new Vector3(0, 0, collisionDepth - depth);
+                    s.isTrigger = true;
+
+                    if (physics == Physics.Trigger)
+                        s.isTrigger = true;
+                    else
+                        s.isTrigger = false;
+                }
+                else
+                {
+                    s.center = pivotPoint * -1;
+                    s.isTrigger = false;
+                }
             }
         }
     }
@@ -1664,7 +1010,7 @@ public class OTObject : MonoBehaviour
                 OT.NoInputTo(this);
             return;
         }
-		
+
         BoxCollider b = GetComponent<BoxCollider>();
         SphereCollider sp = GetComponent<SphereCollider>();
         Rigidbody bd = GetComponent<Rigidbody>();
@@ -1682,7 +1028,6 @@ public class OTObject : MonoBehaviour
                     b = gameObject.AddComponent<BoxCollider>();
                 if (sp != null)
                     DestroyImmediate(sp);
-				otCollider = collider;
             }
             else
             {
@@ -1690,7 +1035,6 @@ public class OTObject : MonoBehaviour
                     sp = gameObject.AddComponent<SphereCollider>();
                 if (b != null)
                     DestroyImmediate(b);
-				otCollider = collider;
             }
 
             if (bd == null)
@@ -1745,7 +1089,6 @@ public class OTObject : MonoBehaviour
             if (colliderType == ColliderType.Sphere && sp == null)
                 sp = gameObject.AddComponent<SphereCollider>();
             OT.InputTo(this);
-			otCollider = collider;
         }
         else
         {
@@ -1758,26 +1101,11 @@ public class OTObject : MonoBehaviour
         SetCollider();
     }
 
-	protected void CheckModifications()
-	{
-#if UNITY_EDITOR
-		if (!Application.isPlaying)
-		{
-			
-				UnityEditor.PropertyModification[] modifications = UnityEditor.PrefabUtility.GetPropertyModifications(this);
-				if (modifications!=null && modifications.Length>0)
-					UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(this);						
-		}
-#endif
-	}
-	
-	
-
     /// <summary>
     /// Overridable virtual method that will check object's editor settings
     /// </summary>
     protected virtual void CheckSettings()
-    {		
+    {
         if (collidable != _collidable_ && !collidable)
         {
             if (_physics != Physics.Custom)
@@ -1820,16 +1148,16 @@ public class OTObject : MonoBehaviour
             _colliderType_ = colliderType;
             CheckInputCollidable();
         }
-		
-		if (OT.world2D)
-		{
-	        if (depth < -1000) depth = -1000;
-	        if (depth > 1000) depth = 1000;
-		}
+
+        if (depth < -1000) depth = -1000;
+        if (depth > 1000) depth = 1000;
 
         if (_depth_ != depth)
+        {
             _depth_ = depth;
-								
+            _paintingDepth = depth + (position.y / 1000) + (position.x / 10000);
+        }
+
         if (size.x < 0 || size.y < 0)
             size = new Vector2((size.x < 0) ? 0 : size.x, (size.y < 0) ? 0 : size.y);
 
@@ -1847,11 +1175,10 @@ public class OTObject : MonoBehaviour
                 OT.RegisterLookup(this, _name_);
                 _name_ = name;
                 baseName = name;
-				CheckModifications();
             }
-		
+
         if (!Vector2.Equals(_size_, _size) || !Vector2.Equals(_position_, _position) || _rotation_ != _rotation)
-        {								
+        {
             Vector2 pos = _position;
             if (worldBounds.width != 0)
             {
@@ -1892,10 +1219,9 @@ public class OTObject : MonoBehaviour
                 _rotation_ = _rotation;
             }
         }
-		
+
         if (!Vector2.Equals(size, _size) || !Vector2.Equals(position, _position) || rotation != _rotation)
         {
-			
             Vector2 pos = position;
             if (worldBounds.width != 0)
             {
@@ -1923,21 +1249,13 @@ public class OTObject : MonoBehaviour
                 _rotation = rotation;
                 _rotation_ = rotation;
             }
-			CheckModifications();
-        }				
+            _paintingDepth = depth + (position.y / 1000) + (position.x / 10000);
+        }
 
-		float _paintingDepth = paintingDepth;
-		if (OT.world != OT.World.WorldTopDown2D)
-		{
-	        if (otTransform.localPosition.z != _paintingDepth)
-            	otTransform.localPosition = new Vector3(otTransform.localPosition.x, otTransform.localPosition.y, _paintingDepth);	
-		}
-		else
-		{
-	        if (otTransform.localPosition.y != _paintingDepth)
-	            	otTransform.localPosition = new Vector3(otTransform.localPosition.x, _paintingDepth, otTransform.localPosition.z);	
-		}
-	}
+        if (transform.position.z != _paintingDepth)
+            transform.position = new Vector3(transform.position.x, transform.position.y, _paintingDepth);
+
+    }
 
     /// <summary>
     /// Overridable virtual method that will check Objects mesh settings
@@ -1955,55 +1273,27 @@ public class OTObject : MonoBehaviour
             meshDirty = true;
         }
     }
-	
+
     /// <summary>
     /// Overridable virtual method that will clean the dirty object
     /// </summary>
     protected virtual void Clean()
     {
-		isDirty = false;
     }
 
-   	/// <summary>
-	/// Overridable virtual method that will assign default properties 
-	/// from the prototype to the instanced new object after it is created
-	/// from the pool
-	/// </summary>
+    /// <exclude />
     public virtual void Assign(OTObject protoType)
     {
-        oSize = protoType.oSize;
-		depth = protoType.depth;
-		registerInput = protoType.registerInput;
-		draggable = protoType.draggable;
-			
+        rotation = protoType.rotation;
+        position = protoType.position;
+        size = protoType.size;
         if (pivot != protoType.pivot || pivotPoint != protoType.pivotPoint)
         {
             pivot = protoType.pivot;
             pivotPoint = protoType.pivotPoint;
             Update();
         }
-		
-		if (protoType.collider !=null && protoType.collider is BoxCollider)
-		{
-			if (otCollider==null)			
-				otCollider = gameObject.AddComponent<BoxCollider>() as BoxCollider;
-			(otCollider as BoxCollider).center = (protoType.collider as BoxCollider).center;
-			(otCollider as BoxCollider).size = (protoType.collider as BoxCollider).size;
-			(otCollider as BoxCollider).enabled = (protoType.collider as BoxCollider).enabled;
-		}
-		else
-		if (protoType.collider !=null && protoType.collider is SphereCollider)
-		{
-			if (otCollider==null)			
-				otCollider=gameObject.AddComponent<SphereCollider>() as SphereCollider;
-			(otCollider as SphereCollider).center = (protoType.collider as SphereCollider).center;
-			(otCollider as SphereCollider).radius = (protoType.collider as SphereCollider).radius;
-			(otCollider as SphereCollider).enabled = (protoType.collider as SphereCollider).enabled;
-		}
-        rotation = protoType.rotation;
-        position = protoType.position;
-        size = protoType.size;
-	}
+    }
 
     /// <summary>
     /// Overridable virtual method that is called after create the object's mesh
@@ -2011,27 +1301,14 @@ public class OTObject : MonoBehaviour
     protected virtual void AfterMesh()
     {
         size = _size;
-		//position = _position;
-		
-		if (OT.world == OT.World.WorldTopDown2D)
-			otTransform.localRotation = Quaternion.Euler( new Vector3(90,rotation,0));
-		else
-		if (OT.world == OT.World.WorldSide2D)
-			otTransform.localRotation = Quaternion.Euler( new Vector3(0,0,rotation));
-				
         SetCollider();
-		
-		if (mesh!=null && mesh.normals.Length == 0) 
-			mesh.RecalculateNormals();
-		
-		Changed();		
-		
     }
-		
+
+    /// <exclude />
     public virtual void OnInput(Vector2 hitPoint)
     {
         _hitPoint = hitPoint - position;
-								
+
         if (onInput != null)
             onInput(this);
         if (!CallBack("onInput", callBackParams))
@@ -2039,8 +1316,8 @@ public class OTObject : MonoBehaviour
 
         return;
     }
-    
-    public virtual void OnMouseOver()
+    /// <exclude />
+    public virtual void OnMouseMove(Vector2 hitPoint)
     {
         _hitPoint = OT.view.mouseWorldPosition - position;
 
@@ -2051,7 +1328,7 @@ public class OTObject : MonoBehaviour
 
         return;
     }
-    
+    /// <exclude />
     public virtual void OnMouseEnter()
     {
         _hitPoint = OT.view.mouseWorldPosition - position;
@@ -2063,7 +1340,45 @@ public class OTObject : MonoBehaviour
 
         return;
     }
-        
+    /// <exclude />
+    public virtual void OnMouseDrag()
+    {
+        if (!draggable) return;
+        if (!Input.GetMouseButton(dragButton)) return;
+
+        if (!isDragging)
+        {
+            if (onDragStart != null)
+                onDragStart(this);
+            if (!CallBack("onDragStart", callBackParams))
+                CallBack("OnDragStart", callBackParams);
+            isDragging = true;
+            _hitPoint = OT.view.mouseWorldPosition - position;
+        }
+        position = OT.view.mouseWorldPosition - _hitPoint;
+    }
+
+    /// <exclude />
+    public virtual void OnMouseUp()
+    {
+        if (isDragging)
+        {
+            if (onDragEnd != null)
+                onDragEnd(this);
+            if (!CallBack("onDragEnd", callBackParams))
+                CallBack("OnDragEnd", callBackParams);
+
+            _dropTarget = OT.ObjectUnderPoint(Input.mousePosition, new OTObject[] { }, new OTObject[] { this });
+            if (_dropTarget != null)
+            {
+                _dropTarget.SetDropped(this);
+                if (_dropTarget.onReceiveDrop != null)
+                    _dropTarget.onReceiveDrop(_dropTarget);
+            }
+            isDragging = false;
+        }
+    }
+    /// <exclude />
     public virtual void OnMouseExit()
     {
         _hitPoint = OT.view.mouseWorldPosition - position;
@@ -2095,92 +1410,20 @@ public class OTObject : MonoBehaviour
     public void RotateTowards(Vector2 toPosition)
     {
         Vector2 upVector = toPosition - position;
-		otTransform.up = upVector.normalized;								
-		if (OT.world == OT.World.WorldTopDown2D)
-		{
-			if (otTransform.up.Equals(new Vector3(0,-1.0f,0)))
-				rotation = 180;
-			else				
-				otTransform.rotation = Quaternion.Euler(90, otTransform.rotation.eulerAngles.y, otTransform.rotation.eulerAngles.z);
-		}		
+        transform.up = upVector.normalized;
         _rotation = rotation;
         _rotation_ = _rotation;
     }
-	
-    /// <summary>
-    /// Rotate so we are heading (up vector) to a specific object
-    /// </summary>
-    /// <param name="target">Target object that we will be heading to.</param>
-    public void RotateTowards(OTObject target)
-    {
-		RotateTowards(target.position);
-    }
-	
-	/// <summary>
-	/// Rotates the towards a specific point with a specific turning rate.
-	/// </summary>
-	public void RotateTowards(Vector2 toPosition, float turnRate, float minEpsilonDegree, float minSpeed, float maxSpeed)
-    {		 		 
-		if (OT.world == OT.World.WorldSide2D)
-		{
-			// vector from the object to target
-			Vector3 toTarget = new Vector3(toPosition.x - position.x, toPosition.y - position.y, 0);
-			 
-			// current object's vector (angle -> vector)
-			var currentAngle1 = -Mathf.Sin(otTransform.rotation.eulerAngles.z * Mathf.Deg2Rad);
-			var currentAngle2 = Mathf.Cos(otTransform.rotation.eulerAngles.z * Mathf.Deg2Rad);
-			Vector3 curr = new Vector3(currentAngle1, currentAngle2, 0);
-			 
-			// getting amount to turn
-			float angle = Vector3.Angle(toTarget, curr);
-			var amount = angle * (Vector3.Dot(Vector3.forward, Vector3.Cross(toTarget, curr)) < 0 ? -1 : 1);
-			
-			 
-			// turning
-			if (Mathf.Abs(amount) > minEpsilonDegree)
-			{
-				amount *= turnRate * Time.deltaTime; // get time independent amount
-				var absAmount = Mathf.Abs(amount);   // abs
-				amount = (absAmount > minSpeed) ? amount: minSpeed*amount/absAmount; // if absAmount is less than minSpeed, use minSpeed*direction
-				amount = (absAmount < maxSpeed) ? amount: maxSpeed*amount/absAmount; // if absAmount is more than maxSpeed, use maxSpeed*direction
-				if (!float.IsNaN(amount))
-					rotation -= amount;
-			}
-			else
-			{
-				if (!float.IsNaN(amount))				
-					rotation -= amount;
-			}
-		} 
-        _rotation = rotation;
-        _rotation_ = _rotation;
-    }
-	
-	public void RotateTowards(Vector2 toPosition, float turnRate)
-    {
-		RotateTowards(toPosition, turnRate, 5, 2, 4);
-	}
- 
-	/// <summary>
-	/// Rotates the towards an object with a specific turning rate.
-	/// </summary>
-	public void RotateTowards(OTObject target, float turnRate, float minSpeed, float maxSpeed)
-    {
-		RotateTowards(target.position, turnRate, 5, minSpeed, maxSpeed);
-    }
- 
-	
-    
+
+    /// <exclude />
     public void SetDropped(OTObject o)
     {
         _dropTarget = o;
     }
 
-    
+    /// <exclude />
     public virtual void StartUp()
     {
-		InitComponents();
-				
         if (!OT.IsRegistered(this))
             OT.Register(this);
         if (registerInput)
@@ -2188,12 +1431,9 @@ public class OTObject : MonoBehaviour
         else
             OT.NoInputTo(this);
 
-		if (mesh == null)
-		{
-	        MeshFilter mf = GetComponent<MeshFilter>();
-	        if (mf != null) mesh = mf.mesh;
-		}
-				
+        MeshFilter mf = GetComponent<MeshFilter>();
+        if (mf != null) mesh = mf.mesh;
+
         inView = true;
     }
 
@@ -2278,7 +1518,7 @@ public class OTObject : MonoBehaviour
             CallBack("OnStay", callBackParams);
     }
 	
-    
+    /// <exclude />
     protected bool CallBack(string handler, object[] param)
     {
 		// if flash we cant use reflection to activate a callback
@@ -2296,48 +1536,10 @@ public class OTObject : MonoBehaviour
 #endif
         return false;
     }
-	
-	float pd()
-	{
-		float px = Mathf.Abs(position.x);
-		float py = Mathf.Abs(position.y);
-		
-		if (py<0.01f && px<0.01f)
-			return  position.y - (position.x / 10);
-		else
-		if (py<0.1f && px<0.1f)
-			return  (position.y / 10) - (position.x / 100);
-		else
-		if (py<1 && px<1)
-			return  (position.y / 100) - (position.x / 1000);
-		else
-			return  (position.y / 1000) - (position.x / 10000);
-	}
-	
-	public void InitComponents()
-	{
-		if (otRenderer == null)
-			otRenderer = renderer;
-		if (otCollider == null)
-			otCollider = collider;
-		if (otTransform == null)
-			otTransform = transform;		
-	}
-		
+
+    /// <exclude />
     protected virtual void Awake()
     {
-		InitComponents();
-		
-		if (name!="" && name != gameObject.name)
-		{
-			name = gameObject.name;						
-			CheckModifications();
-		}
-		
-		// reset rotatio editor prop value if it was not local.
-		if (_rotation != rotation)
-			_rotation = rotation;		
-						
         // initialize attributes
         _position_ = position;
         _depth_ = depth;
@@ -2350,34 +1552,35 @@ public class OTObject : MonoBehaviour
         _collisionDepth_ = collisionDepth;
         _collisionSize_ = collisionSize;
         _physics_ = physics;
-						
-		if (otTransform.parent!=null)
-			_position = position;			
-		
-		if (OT.world == OT.World.WorldTopDown2D)
-			otTransform.localRotation = Quaternion.Euler( new Vector3(90,rotation,0));
-	
-		if (physics == Physics.RigidBody || physics == Physics.NoGravity || physics == Physics.Custom)
-			passiveControl = true;		
+
+        _paintingDepth = depth + (position.y / 1000) + (position.x / 10000);
 				
-        if (!OT.IsRegistered(this))
-            OT.Register(this);		
-		
     }
+
+    // -----------------------------------------------------------------
+    // Use this for initialization
+    /// <exclude />
+    protected OTObject copyObject = null;
 	
-	bool _inCheckName = false;
-	void CheckName()
-	{
-		if (_inCheckName) return;
+    /// <exclude />
+    protected virtual void Start()
+    {
 		
-		_inCheckName = true;
+		callBackParams = new object[] { this };
+
+        if (!OT.isValid)
+        {
+            Debug.LogError("Orthello : Orthello main OT system object not available!");
+            Debug.Log("Please remove this Orthello object and add the OT object first.");
+        }
+		
         isCopy = (name != "" && OT.ObjectByName(name) != null && OT.ObjectByName(name) != this);
         if (isCopy)
             copyObject = OT.ObjectByName(name);
 				
-        if (_name == "" || isCopy )
+        if (_name == "" || isCopy || _isPrefab)
         {
-            if (copyObject != null )
+            if (copyObject != null || _isPrefab)
             {
 				if (copyObject !=null)
 				{
@@ -2385,46 +1588,16 @@ public class OTObject : MonoBehaviour
 	                if (baseName == "")
 	                    baseName = name;
 				}				
-				if (baseName!="")
-				{
-	                int baseIdx = 1;
-	                while (GameObject.Find(baseName + "-" + baseIdx))
-	                    baseIdx++;
-	                name = baseName + "-" + baseIdx;
-					CheckModifications();
-				}
+                int baseIdx = 1;
+                while (GameObject.Find(baseName + "-" + baseIdx))
+                    baseIdx++;
+                name = baseName + "-" + baseIdx;
             }
-			if (name == "")
-			{
+            else
                 name = GetTypeName() + " (id=" + this.gameObject.GetInstanceID() + ")";
-				CheckModifications();
-			}
+			_isPrefab = false;
         }
-		_inCheckName = false;
-		
-	}
-	
-    // -----------------------------------------------------------------
-    // Use this for initialization
-    
-    protected OTObject copyObject = null;
-	
-    
-	bool isStarted = false;
-    protected virtual void Start()
-    {	
-		isStarted = true;
-		InitComponents();
-		
-		callBackParams = new object[] { this };		
-        if (!OT.isValid)
-        {
-            Debug.LogError("Orthello : Orthello main OT system object not available!");
-            Debug.Log("Please remove this Orthello object and add the OT object first.");
-        }
-		
-		CheckName();
-		
+
         // check if we have a meshfilter
         MeshFilter mf = GetComponent<MeshFilter>();
         if (mf == null)
@@ -2432,21 +1605,18 @@ public class OTObject : MonoBehaviour
         // check if we have a mesh renderer
         MeshRenderer mr = GetComponent<MeshRenderer>();
         if (mr == null)
-		{
             mr = gameObject.AddComponent<MeshRenderer>();
-			otRenderer = renderer;
-		}
 
         // check if we have to generate a mesh for this object
         if (Application.isPlaying) mesh = mf.mesh;
         else mesh = mf.sharedMesh;
-				
+
         if (mesh == null || mesh.vertexCount == 0 || isCopy)
         {
             Mesh m = null;
             if (Application.isPlaying) m = mf.mesh;
             else m = mf.sharedMesh;
-						
+
             mesh = GetMesh();
             if (mesh != null)
             {
@@ -2464,8 +1634,13 @@ public class OTObject : MonoBehaviour
             }
         };
 
+        if (!OT.IsRegistered(this))
+            OT.Register(this);
+
         CheckInputCollidable();
-        if (!Application.isPlaying)
+        if (Application.isPlaying)
+            oSize = Vector2.zero;
+        else
         {
             if (init)
             {
@@ -2475,32 +1650,121 @@ public class OTObject : MonoBehaviour
             }
         }
     }
-		
-	/// <summary>
-	/// Worldbounds of this object to the area of the provided orthello object
-	/// </summary>
-	public void BoundBy(OTObject o, Vector2 expand)
-	{
-		Rect rect = o.rect;
-		float dx = size.x/2;
-		float dy = size.y/2;
-		
-		// set world bounds
-		worldBounds = new Rect(rect.xMin + dx - expand.x, rect.yMin + dy - expand.y, rect.width - size.x + (expand.x*2), Mathf.Abs(rect.height) - size.y + (expand.y*2));
-						
-	}			
-	public void BoundBy(OTObject o)
-	{
-		BoundBy(o, Vector2.zero);
-	}	
-	    
+	
+	
+
+    /// <exclude />
+    bool RecordMode(bool set, bool value)
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorWindow W = null;
+        System.Type T = System.Type.GetType("UnityEditor.AnimationWindow,UnityEditor");
+        Object[] allAniWindows = Resources.FindObjectsOfTypeAll(T);
+        if (allAniWindows.Length > 0)
+            W = (UnityEditor.EditorWindow)allAniWindows[0];
+
+        if (T != null && W != null)
+        {
+            if (set)
+                T.InvokeMember("SetAutoRecordMode", System.Reflection.BindingFlags.InvokeMethod, null, W, new object[] { value });
+            System.Object Res = T.InvokeMember("GetAutoRecordMode", System.Reflection.BindingFlags.InvokeMethod, null, W, null);
+            return ((bool)Res);
+        }
+#endif
+        return false;
+    }
+
+    /// <exclude />
+    protected bool RecordMode()
+    {
+        return RecordMode(false, false);
+    }
+    /// <exclude />
+    protected bool RecordMode(bool value)
+    {
+        return RecordMode(true, value);
+    }
+
+    /// <exclude />
     public void ForceUpdate()
     {
         Update();
     }
+	
+	bool PBChecked = false;
+    // Update is called once per frame
+    /// <exclude />
+    /// 
+    protected virtual void Update()
+    {
+        if (!OT.isValid || transform == null || gameObject == null) return;
 
-	public void UpdateControllers()
-	{
+
+        if (!Application.isPlaying || dirtyChecks || OT.dirtyChecks)
+        {
+            if (registerInput != _registerInput_ && !registerInput && draggable)
+                draggable = false;
+
+			if (!PBChecked)
+			{
+				if (gameObject.GetComponent<OTPB>()==null)
+					gameObject.AddComponent<OTPB>();
+				PBChecked = true;
+			}
+
+            if (draggable && !registerInput)
+                _registerInput = true;
+
+            if (!RecordMode())
+            {
+                CheckSettings();
+                CheckDirty();
+            }
+
+        }
+
+        if (meshDirty)
+        {
+						
+            transform.localScale = Vector3.one;
+
+            MeshFilter mf = GetComponent<MeshFilter>();
+            Mesh m = null;
+            if (Application.isPlaying)
+            {
+                m = mf.mesh;
+                mesh = GetMesh();
+                if (mesh != null)
+                    mf.mesh = mesh;
+            }
+            else
+            {
+                m = mf.sharedMesh;
+                mesh = GetMesh();
+                if (mesh != null)
+                    mf.sharedMesh = mesh;
+            }
+            if (mesh != null)
+            {
+                if (m != null && !isCopy)
+                {
+                    if (Application.isPlaying)
+                        Destroy(m);
+                    else
+                        DestroyImmediate(m);
+                }
+                meshDirty = false;
+                AfterMesh();
+            }
+        }
+
+        if (isDirty)
+            Clean();
+
+
+        if (isCopy)
+            isCopy = false;
+
         if (controllers.Count > 0)
         {
             for (int c = 0; c < controllers.Count; c++)
@@ -2510,102 +1774,7 @@ public class OTObject : MonoBehaviour
                     co.Update(Time.deltaTime);
             }
         }
-	}
-	
-	/// <summary>
-	/// Synchronize this sprite with the sprite's transform
-	/// </summary>
-	/// <remarks>
-	/// Sometimes you want to adjust the transform of a sprite using Translate, or by adjusting the gameObject.transform. Due to
-	/// optimizations and passive mode, this is ignored by Orthello. Use this method to synchronize the orthello sprite with its 
-	/// Transform object. Synchronize is autmaticly called when sprite.physics is set to RigidBody, Nogravity or Custom.
-	/// </remarks>
-	public void Synchronize()
-	{
-		_position = position;
-		_position_ = _position;
-		_rotation = rotation;
-		_rotation_ = rotation;
-	}
-	
 
-	public virtual void PassiveUpdate()
-	{
-		// check if we need to synchronize
-		if (Application.isPlaying && (physics == Physics.RigidBody || physics == Physics.NoGravity || physics == Physics.Custom ))
-			Synchronize();
-	}
-		
-    // Update is called once per frame	
-	int dirtyUpdateCycles = 0;					// lets always check all settings the first 5 cycles
-    protected virtual void Update()
-    {			
-        if (!OT.isValid || otTransform == null || gameObject == null || OT.view == null ) return;
-			
-		// check if we started.. on web/android devices when loaded from another level,
-		// update is sometimes called before start.
-		if (!isStarted)
-			Start();
-
-		// check if we need to synchronize
-		if (Application.isPlaying && (physics == Physics.RigidBody || physics == Physics.NoGravity || physics == Physics.Custom ))
-			Synchronize();
-				
-        if (!Application.isPlaying || dirtyChecks || OT.dirtyChecks || (dirtyUpdateCycles<5) || isDirty)
-        {
-			dirtyUpdateCycles++;
-            if (registerInput != _registerInput_ && !registerInput && draggable)
-			{
-                draggable = false;
-				CheckModifications();
-			}
-			
-			
-            if (draggable && !registerInput)
-                _registerInput = true;
-
-            if (!OT.recordMode)
-            {								
-                CheckSettings();
-                CheckDirty();
-            }			
-        }
-						
-        if (meshDirty)
-        {						
-			isDirty = true;
-            otTransform.localScale = Vector3.one;
-
-            MeshFilter mf = GetComponent<MeshFilter>();
-			Mesh newMesh = GetMesh();			
-            if (mesh != null && !isCopy)
-            {
-                if (Application.isPlaying)
-                    DestroyImmediate(mesh);
-                else
-                    DestroyImmediate(mesh);
-            }			
-            if (newMesh != null)
-			{		
-				mesh = newMesh;
-				if (Application.isPlaying)
-					mf.mesh = mesh;
-				else
-					mf.sharedMesh = mesh;
-		        mesh.RecalculateBounds();
-		        mesh.RecalculateNormals();								
-                AfterMesh();
-			}						
-            meshDirty = false;
-        }
-		
-        if (isDirty)
-            Clean();
-
-        if (isCopy)
-            isCopy = false;
-
-		UpdateControllers();		
     }
 
     void OnBecameVisible()
@@ -2705,204 +1874,16 @@ public class OTObject : MonoBehaviour
         while (controllers.Count > 0)
             RemoveController(controllers[0]);
     }
-	
-	protected void Alert(string message)
-	{
-		if (OT.debug)
-			OTDebug.Message(message);
-		else
-			Debug.Log(message);
-	}
-		
-	public virtual void Dispose()
-	{
-		ClearControllers();
-	}
-	    
+
+    /// <exclude />
     protected void OnDestroy()
     {
-		callBackTargets.Clear();
         if (mesh != null)
             DestroyImmediate(mesh);
 
         if (OT.isValid)
             OT.RemoveObject(this);
+
     }
-	
-	public virtual void Reset()
-	{
-		meshDirty = true;
-		isDirty = true;		
-		
-		if (!position.Equals(_position))
-			position = _position;
-		
-		CheckInputCollidable();
-		Update();
-	}
-	
-	/// <summary>
-	/// Gets a Child Orthello Object that begins with the specified name.
-	/// </summary>
-	/// <remarks>
-	/// It is possible to specify nested childs like "top/sprite/label" or "top.sprite.label"
-	/// where gameobjects must be specified exactly by name and orthello objects/sprites by the beginning of their name
-	/// </remarks>
-	public OTObject Child(string name)
-	{
-		OTObject o = OT.FindChild(gameObject,name);
-		if (o!=null)
-			return o;
 
-		if (name.IndexOf(".")>=0 || name.IndexOf("/")>=0)
-		{
-			string[] sa = name.Split('.');
-			if (name.IndexOf("/")>=0)
-				sa = name.Split('/');
-			if (sa.Length>0)
-			{
-				GameObject g = this.gameObject;
-				int idx = 0;
-				while (idx <sa.Length)
-				{
-					o = OT.FindChild(g,sa[idx]);
-					if (o!=null)
-						g = o.gameObject;
-					else
-					{
-						Transform t = g.transform.FindChild(sa[idx]);
-						if (t!=null)
-							g = t.gameObject;
-						else
-							return null;
-					}
-					if (g==null)
-						return null;
-					idx++;
-				}				
-			}
-		}		
-		return o;
-	}
-	
-	/// <summary>
-	/// Gets a Child sprite that begins with the specified name.
-	/// </summary>
-	/// <remarks>
-	/// It is possible to specify nested childs like "top/sprite/label" or "top.sprite.label"
-	/// where gameobjects must be specified exactly by name and orthello objects/sprites by the beginning of their name
-	/// </remarks>
-	public OTSprite Sprite(string name)
-	{
-		return Child(name) as OTSprite;
-	}
-	
-	/// <summary>
-	/// Sets this sprite as a child of a parent GameObject
-	/// </summary>
-	public void ChildOf(GameObject parent)
-	{
-		dirtyUpdateCycles = 0;
-		if (parent == null)
-			otTransform.parent = null;
-		else
-			otTransform.parent = parent.transform;
-		Update();
-	}	
-	
-	/// <summary>
-	/// Sets this sprite as a child of a parent OTObject
-	/// </summary>
-	public void ChildOf(OTObject parent)
-	{
-		ChildOf(parent.gameObject);
-	}
-		
-	/// <summary>
-	/// transforms a vector in this  object's parent local space to world space
-	/// </summary>
-	public Vector2 toWorld(Vector2 v)
-	{
-		if (otTransform.parent!=null)
-			return otTransform.parent.localToWorldMatrix.MultiplyPoint3x4(v);
-		else
-		   	return v;
-	}
-	
-	/// <summary>
-	/// transforms a vector from worldspace to the object's parent local space
-	/// </summary>
-	public Vector2 fromWorld(Vector2 v)
-	{
-		if (otTransform.parent!=null)
-			return otTransform.parent.worldToLocalMatrix.MultiplyPoint3x4(v);
-		else
-		   	return v;
-	}
-
-}
-
-/// <summary>
-/// Serializable int Vector2
-/// </summary>
-[System.Serializable]
-public class IVector2
-{
-	/// <summary>
-	/// The x value
-	/// </summary>
-	public int x;
-	/// <summary>
-	/// The y value
-	/// </summary>
-	public int y;
-
-	/// <summary>
-	/// a zero vector
-	/// </summary>
-	/// <value>
-	/// The zero.
-	/// </value>
-	public static IVector2 zero
-	{
-		get
-		{
-			return new IVector2(0,0);
-		}
-	}
-	
-	public IVector2(int x, int y)
-	{
-		this.x = x;
-		this.y = y;
-	}
-	
-	public IVector2()
-	{
-		this.x = 0;
-		this.y = 0;
-	}
-	
-	/// <summary>
-	/// Creates a copy of a vector
-	/// </summary>
-	public IVector2 Clone()
-	{
-		return new IVector2(x,y);
-	}
-
-	/// <summary>
-	/// Determines if two int vectors are equal
-	/// </summary>
-	public bool Equals(IVector2 iv)
-	{
-		return (x == iv.x && y == iv.y);
-	}
-	
-	public static string operator +(string s, IVector2 v)
-	{
-		return s + "("+v.x+","+v.y+")";
-	}
-		
-	
 }

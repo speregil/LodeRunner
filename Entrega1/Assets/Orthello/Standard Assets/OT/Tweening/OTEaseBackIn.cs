@@ -24,20 +24,24 @@
 using UnityEngine;
 using System.Collections;
 
+/// <exclude />
 public class OTEaseBackIn : OTEase
 {
     
     float s = 1.70158f;
 
+    /// <exclude />
     public override float ease(float t, float b, float c, float d)
     {
         return c * (t /= d) * t * ((s + 1) * t - s) + b;
     }
 
+    /// <exclude />
     public OTEaseBackIn()
     {
     }
 
+    /// <exclude />
     public OTEaseBackIn(float s)
     {
         this.s = s;

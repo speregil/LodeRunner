@@ -7,13 +7,17 @@ using System.Collections.Generic;
 /// </summary>
 public class OTSpriteAtlas : OTContainer
 {
-        
+    
+    /// <exclude />
+    public Vector2 _sheetSize = Vector2.zero;
+    /// <summary>
+    /// Spritesheet's texture
+    /// </summary>
+    public Texture texture;
     /// <summary>
     /// Info about the frames on the atlas
     /// </summary>
     public OTAtlasData[] atlasData = new OTAtlasData[] {};
-	
-	[HideInInspector]
     /// <summary>
     /// Use position offset and sizing with trimmed frames
     /// </summary>
@@ -23,27 +27,46 @@ public class OTSpriteAtlas : OTContainer
     /// and assigned when this frame is requested.
     /// </remarks>
     public bool offsetSizing = true;
-	
-	
-	[HideInInspector]
-	public string metaType = "";
-	[HideInInspector]
-	public OTAtlasMetaData[] metaData;
 
-    
+    Vector2 _sheetSize_ = Vector2.zero;
+
+    /// <summary>
+    /// Original sheet size
+    /// </summary>
+    /// <remarks>
+    /// This setting is optional and only used in combination with frameSize when
+    /// the frames do not exactly fill up the texture horizontally and/or vertically.
+    /// <br></br><br></br>
+    /// Sometimes a sheet has some left over space to the right or bottom of the
+    /// texture that was used. By setting the original sheetSize and the frameSize, 
+    /// the empty left-over space can be calculated and taken into account when
+    /// setting the texture scaling and frame texture offsetting.
+    /// </remarks>
+    public Vector2 sheetSize
+    {
+        get
+        {
+            return _sheetSize;
+        }
+        set
+        {
+            _sheetSize = value;
+            dirtyContainer = true;
+        }
+    }
+
+    /// <exclude />
     protected bool atlasReady = true;
-    
+    /// <exclude />
     protected bool _offsetSizing = true;
-	
-	Dictionary<string, OTAtlasData> dataByName = new Dictionary<string, OTAtlasData>();
-	public OTAtlasData DataByName(string dataName)
-	{
-		if (dataByName.ContainsKey(dataName))
-			return dataByName[dataName];
-		return null;
-	}
-    
-    
+
+    /// <exclude />
+    override public Texture GetTexture()
+    {
+        return texture;
+    }
+
+    /// <exclude />
     override protected Frame[] GetFrames()
     {
         if (texture == null) return new Frame[] { };
@@ -59,17 +82,12 @@ public class OTSpriteAtlas : OTContainer
         {
             // convert atlasData to frames
             Frame[] frames = new Frame[atlasData.Length];
-			
-			dataByName.Clear();
-			
+
             for (int a = 0; a < atlasData.Length; a++)
             {
                 OTAtlasData data = atlasData[a];
                 Frame frame = new Frame();
                 frame.name = data.name;
-				
-				if (!dataByName.ContainsKey(data.name))
-					dataByName.Add(data.name,data);								
 
                 if (offsetSizing)
                 {
@@ -124,58 +142,23 @@ public class OTSpriteAtlas : OTContainer
         return new Frame[] { };
     }
 
-    
+    /// <exclude />
     new protected void Start()
     {
+        _sheetSize_ = sheetSize;
         _offsetSizing = offsetSizing;
         base.Start();
     }
-	
-	protected virtual void LocateAtlasData()
-	{
-	}	
-		
-	protected void AddMeta(string key, string value)
-	{
-		if (metaData==null)
-			metaData = new OTAtlasMetaData[] {};
-		
-		System.Array.Resize<OTAtlasMetaData>(ref metaData, metaData.Length+1);
-		metaData[metaData.Length-1] = new OTAtlasMetaData();
-		metaData[metaData.Length-1].key = key;		
-		metaData[metaData.Length-1].value = value;				
-	}	
-    
-    protected override void Update()
+
+    /// <exclude />
+    new protected void Update()
     {
-        if (_offsetSizing!=offsetSizing || _texture!=texture)
+        if (!Vector2.Equals(_sheetSize, _sheetSize_) || _offsetSizing!=offsetSizing)
         {
-			if (texture!=_texture && texture!=null)
-				LocateAtlasData();
-			
-            _offsetSizing = offsetSizing;			
+            _sheetSize_ = _sheetSize;
+            _offsetSizing = offsetSizing;
             dirtyContainer = true;
         }
         base.Update();
     }
-	
-	public string GetMeta(string key)
-	{
-		if (metaData == null)
-			return "";		
-		for (int k=0; k<metaData.Length; k++)
-		{
-			if (metaData[k].key == key)
-				return metaData[k].value;
-		}	
-		return "";
-	}	
-	
 }
-
-[System.Serializable]
-public class OTAtlasMetaData
-{
-	public string key;
-	public string value;
-}	

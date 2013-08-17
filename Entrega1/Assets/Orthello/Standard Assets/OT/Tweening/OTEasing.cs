@@ -451,71 +451,7 @@ public class OTEasing {
             return elasticInOut;
         }
     }
-	
-	/// <summary>
-	/// Ease type enumeration with all easing functions
-	/// </summary>
-	public enum EaseType
-	{
-		Linear, 
-		BackIn, BackInOut, BackOut,
-		BounceIn, BounceInOut, BounceOut,
-		CircIn, CircInOut, CircOut,
-		CubicIn, CubicInOut, CubicOut,
-		ElasticIn, ElasticInOut, ElasticOut,
-		ExpoIn, ExpoInOut, ExpoOut,
-		QuadIn, QuadInOut, QuadOut,
-		QuartIn, QuartInOut, QuartOut,
-		QuintIn, QuintInOut, QuintOut,
-		SineIn, SineInOut, SineOut,
-		StrongIn, StrongInOut, StrongOut
-	}
-	
-	/// <summary>
-	/// gets and ease object based on its ease type
-	/// </summary>
-	public static OTEase Ease(EaseType ease)
-	{
-		switch(ease)
-		{
-		case EaseType.Linear: 		return Linear;
-		case EaseType.BackIn: 		return BackIn;
-		case EaseType.BackInOut : 	return BackInOut;
-		case EaseType.BackOut : 	return BackOut;
-		case EaseType.BounceIn : 	return BounceIn;
-		case EaseType.BounceInOut : return BounceInOut;
-		case EaseType.BounceOut : 	return BounceOut;
-		case EaseType.CircIn :		return CircIn;
-		case EaseType.CircInOut :	return CircInOut;
-		case EaseType.CircOut :		return CircOut;
-		case EaseType.CubicIn : 	return CubicIn;
-		case EaseType.CubicInOut : 	return CubicInOut;
-		case EaseType.CubicOut :	return CubicOut;
-		case EaseType.ElasticIn :	return ElasticIn;
-		case EaseType.ElasticInOut :return ElasticInOut;
-		case EaseType.ElasticOut :	return ElasticOut;
-		case EaseType.QuadIn :		return QuadIn;
-		case EaseType.QuadInOut : 	return QuadInOut;
-		case EaseType.QuadOut :		return QuadOut;
-		case EaseType.QuartIn : 	return QuartIn;
-		case EaseType.QuartInOut : 	return QuartInOut;
-		case EaseType.QuartOut :	return QuartOut;
-		case EaseType.QuintIn :		return QuintIn;
-		case EaseType.QuintInOut : 	return QuintInOut;
-		case EaseType.QuintOut :	return QuintOut;
-		case EaseType.SineIn : 		return SineIn;
-		case EaseType.SineInOut : 	return SineInOut;
-		case EaseType.SineOut :		return SineOut;
-		case EaseType.StrongIn : 	return StrongIn;
-		case EaseType.StrongInOut : return StrongInOut;
-		case EaseType.StrongOut :	return StrongOut;
-		case EaseType.ExpoIn : 		return ExpoIn;
-		case EaseType.ExpoInOut : 	return ExpoInOut;
-		case EaseType.ExpoOut : 	return ExpoOut;	
-		}	
-		return linear;
-	}
-	
+
     private static OTEase linear = null;
     
     private static OTEase backIn = null;

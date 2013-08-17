@@ -24,8 +24,10 @@
 using UnityEngine;
 using System.Collections;
 
+/// <exclude />
 public class OTEaseCircInOut : OTEase
 {
+    /// <exclude />
     public override float ease(float t, float b, float c, float d)
     {
         if ((t /= d / 2) < 1) 

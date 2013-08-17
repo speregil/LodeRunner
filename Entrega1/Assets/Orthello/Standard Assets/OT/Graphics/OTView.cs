@@ -7,10 +7,6 @@ using System.Collections;
 [ExecuteInEditMode]
 public class OTView : MonoBehaviour
 {
-
-	public delegate void ScreenChangeDelegate();	
-	public ScreenChangeDelegate onScreenChange = null;
-	
     //----------------------------------------------------------------------
     // Public properties
     //----------------------------------------------------------------------
@@ -116,9 +112,7 @@ public class OTView : MonoBehaviour
             if (!alwaysPixelPerfect) Update();
         }
     }
-	
-	
-	OTObject movementObject = null;
+
     /// <summary>
     /// Target object's position will followed.
     /// </summary>
@@ -131,8 +125,6 @@ public class OTView : MonoBehaviour
         set
         {
             _movementTarget = value;
-			if (value!=null)
-				movementObject = movementTarget.GetComponent<OTObject>();
             Update();
         }
     }
@@ -174,8 +166,6 @@ public class OTView : MonoBehaviour
             Update();
         }
     }
-	
-	public Camera cameraOverride = null;
 
     /// <summary>
     /// Camera object belonging to this this view.
@@ -192,22 +182,16 @@ public class OTView : MonoBehaviour
     {
         return !( r2.xMin > r1.xMax
             || r2.xMax < r1.xMin
-            || r2.yMin > r1.yMax
-            || r2.yMax < r1.yMin
+            || r2.yMin < r1.yMax
+            || r2.yMax > r1.yMin
             );
     }
-	
-	/// <summary>
-    /// Checks if a specific 2D coordinate is in view.
-	/// </summary>
-	public bool Contains(Vector2 v)
-    {
-        return IntersectRect(worldRect, new Rect(v.x,v.y,0,0));
-    }
-		
+
     /// <summary>
     /// Checks if a specific object is in view.
     /// </summary>
+    /// <param name="o">Object to check</param>
+    /// <returns></returns>
     public bool Contains(OTObject o)
     {
         return IntersectRect(worldRect, o.rect);
@@ -219,8 +203,7 @@ public class OTView : MonoBehaviour
     {
         get
         {
-			Vector3 wp = camera.ScreenToWorldPoint(Input.mousePosition);
-            return ((OT.world == OT.World.WorldSide2D)?(Vector2)wp:new Vector2(wp.x,wp.z));
+           return camera.ScreenToWorldPoint(Input.mousePosition);
         }
     }
     /// <summary>
@@ -249,32 +232,26 @@ public class OTView : MonoBehaviour
     {
         get
         {
-			if (cameraOverride!=null)
-				return cameraOverride;
-			else
-			if (OT.inputCameras[0]!=null)
-       			return OT.inputCameras[0];
-			else
-				return Camera.main;
+            return Camera.main;
         }
     }
 
     //----------------------------------------------------------------------
-    
+    /// <exclude />
     public float _zoom = 0f;
-    
+    /// <exclude />
     public Vector2 _position = Vector2.zero;
-    
+    /// <exclude />
     public float _rotation = 0;
-    
+    /// <exclude />
     public GameObject _movementTarget = null;
-    
+    /// <exclude />
     public GameObject _rotationTarget = null;
-    
+    /// <exclude />
     public Rect _worldBounds = new Rect(0, 0, 0, 0);
-    
+    /// <exclude />
     public bool _alwaysPixelPerfect = true;
-    
+    /// <exclude />
     public Vector2 _pixelPerfectResolution = new Vector2(1024, 768);
     /// <summary>
     /// Overrides the Orthello controlled Orthographic size of the camera
@@ -289,6 +266,10 @@ public class OTView : MonoBehaviour
     /// </summary>
     public Color gizmosColor = Color.yellow;
     /// <summary>
+    /// if true, camera is forced to orthographic
+    /// </summary>
+    public bool forceOrthographic = true;
+    /// <summary>
     /// Z depth of the camera position
     /// </summary>
     public int cameraDepth = -1001;
@@ -296,7 +277,8 @@ public class OTView : MonoBehaviour
     /// Far clipping range of the camera
     /// </summary>
     public int cameraRange = 2001;
-	    
+
+    /// <exclude />
     public float sizeFactor
     {
         get
@@ -307,9 +289,6 @@ public class OTView : MonoBehaviour
 
     private float sizeFact = 1;
     private Vector2 _position_ = Vector2.zero;
-    private float _zoom_ = 0;
-    private float _rotation_ = 0;
-	private Vector2 _currentScreen = Vector2.zero;
 
     float resSize
     {
@@ -318,22 +297,16 @@ public class OTView : MonoBehaviour
             if (customSize == 0)
             {
                 if (alwaysPixelPerfect)
-                    return (float)Screen.height / 2f;
+                    return ((float)Screen.height / 500f) * 250f;
                 else
-				{
-					float arDef = pixelPerfectResolution.x/pixelPerfectResolution.y;
-					float arCur = (float)Screen.width/(float)Screen.height;					
-					if (arCur < arDef)
-                       return (float)Screen.height / 2f * (pixelPerfectResolution.x / (float)Screen.width);
-					else
-                       return (float)Screen.height / 2f * (pixelPerfectResolution.y / (float)Screen.height);
-				}
+                    //    return ((pixelPerfectResolution.y / 500) * (250 * (pixelPerfectResolution.y/Screen.height)));
+                    return ((float)Screen.height / 500f) * 250f * (pixelPerfectResolution.y / (float)Screen.height);
             }
             else
-              return customSize;        
-              }
+              return customSize;
+        }
     }
-	
+    /// <exclude />
     public void InitView()
     {
         SetCamera();
@@ -341,38 +314,14 @@ public class OTView : MonoBehaviour
 
     void SetCamera()
     {
-        if (OT.world2D)
+        if (forceOrthographic)
         {
-			if (!camera.orthographic)
-            	camera.orthographic = true;
-			CheckViewSize();
-			if (camera.near!=0)
-            	camera.near = 0;
-			if (camera.far!= cameraRange)				
-            	camera.far = cameraRange;				
-			if (OT.world == OT.World.WorldSide2D)
-			{
-				cameraDepth = -1000;
-				if (!camera.transform.rotation.Equals(Quaternion.identity))
-            		camera.transform.rotation = Quaternion.identity;
-				if (!camera.transform.position.Equals(new Vector3(_position.x, _position.y, cameraDepth)))
-            		camera.transform.position = new Vector3(_position.x, _position.y, cameraDepth);
-			}
-			else
-			{
-				cameraDepth = 1000;
-				if (!camera.transform.rotation.Equals(Quaternion.Euler(new Vector3(90,0,0))))
-            		camera.transform.rotation = Quaternion.Euler(new Vector3(90,0,0));
-				if (!camera.transform.position.Equals(new Vector3(_position.x, cameraDepth, _position.y)))
-            		camera.transform.position = new Vector3(_position.x, cameraDepth, _position.y);
-			}  
-			if (!this.transform.position.Equals(camera.transform.position))
-				this.transform.position = camera.transform.position;
-			if (!this.transform.rotation.Equals(camera.transform.rotation))
-				this.transform.rotation = camera.transform.rotation;								
-		}
-		else
-			drawGizmos = false;
+            camera.orthographic = true;
+            camera.orthographicSize = resSize * Mathf.Pow(2, _zoom * -1);
+            camera.near = 0;
+            camera.far = cameraRange;
+            camera.transform.position = new Vector3(_position.x, _position.y, cameraDepth);
+        }
     }
 
     float _customSize;
@@ -380,12 +329,10 @@ public class OTView : MonoBehaviour
     {
         _customSize = customSize;
         _position_ = _position;
-        _rotation_ = _rotation;
-		_currentScreen = new Vector2(Screen.width,Screen.height);
-        _zoom_ = _zoom;
+        _zoom = zoom;
         if (customSize != 0)
         {
-            sizeFact = (customSize / pixelPerfectResolution.y) * 2f;
+            sizeFact = ((customSize / 300) / pixelPerfectResolution.y) * 600;
             if (Application.isPlaying && alwaysPixelPerfect)
             {
                 customSize *= Screen.height / pixelPerfectResolution.y;
@@ -394,12 +341,9 @@ public class OTView : MonoBehaviour
         }
         else
             sizeFact = 1;
-		
-		if (movementTarget!=null)
-			movementObject = movementTarget.GetComponent<OTObject>();
 
         GetWorldRect();
-		recordPrefab = true;
+
     }
 
     private Rect _worldRect;
@@ -409,53 +353,22 @@ public class OTView : MonoBehaviour
     Vector2 p4;
     Vector2 bl;
     Vector2 tr;
-	
     void GetWorldRect()
     {
-		if (OT.world == OT.World.World3D)
-		{
-			_worldRect = new Rect(0,0,0,0);
-			return;
-		}
-		
-		Vector3 vs = camera.ScreenToWorldPoint(new Vector2(0, 0));
-		if (OT.world == OT.World.WorldSide2D)
-        	p1 = vs;
-		else
-			p1 = new Vector2(vs.x,vs.z);		
-        vs = camera.ScreenToWorldPoint(new Vector2(0, camera.pixelHeight));
-		if (OT.world == OT.World.WorldSide2D)
-        	p2 = vs;
-		else
-			p2 = new Vector2(vs.x,vs.z);
-        vs = camera.ScreenToWorldPoint(new Vector2(camera.pixelWidth, 0));
-		if (OT.world == OT.World.WorldSide2D)
-        	p3 = vs;
-		else
-			p3 = new Vector2(vs.x,vs.z);
-        vs = camera.ScreenToWorldPoint(new Vector2(camera.pixelWidth, camera.pixelHeight));
-		if (OT.world == OT.World.WorldSide2D)
-        	p4 = vs;
-		else
-			p4 = new Vector2(vs.x,vs.z);
+        p1 = camera.ScreenToWorldPoint(new Vector2(0, 0));
+        p2 = camera.ScreenToWorldPoint(new Vector2(0, camera.pixelHeight));
+        p3 = camera.ScreenToWorldPoint(new Vector2(camera.pixelWidth, 0));
+        p4 = camera.ScreenToWorldPoint(new Vector2(camera.pixelWidth, camera.pixelHeight));
 
         float x1, x2, y1, y2;
 
-        x1 = p1.x; x2 = p1.x; 
-		y1 = p1.y; y2 = p1.y;
-		
-        if (p2.x < x1) x1 = p2.x; 
-		if (p2.y < y1) y1 = p2.y;
-        if (p2.x > x2) x2 = p2.x; 
-		if (p2.y > y2) y2 = p2.y;
-        if (p3.x < x1) x1 = p3.x; 
-		if (p3.y < y1) y1 = p3.y;
-        if (p3.x > x2) x2 = p3.x; 
-		if (p3.y > y2) y2 = p3.y;
-        if (p4.x < x1) x1 = p4.x; 
-		if (p4.y < y1) y1 = p4.y;
-        if (p4.x > x2) x2 = p4.x; 
-		if (p4.y > y2) y2 = p4.y;
+        x1 = p1.x; x2 = p1.x; y1 = p1.y; y2 = p1.y;
+        if (p2.x < x1) x1 = p2.x; if (p2.y < y1) y1 = p2.y;
+        if (p2.x > x2) x2 = p2.x; if (p2.y > y2) y2 = p2.y;
+        if (p3.x < x1) x1 = p3.x; if (p3.y < y1) y1 = p3.y;
+        if (p3.x > x2) x2 = p3.x; if (p3.y > y2) y2 = p3.y;
+        if (p4.x < x1) x1 = p4.x; if (p4.y < y1) y1 = p4.y;
+        if (p4.x > x2) x2 = p4.x; if (p4.y > y2) y2 = p4.y;
 
         bl = new Vector2(x1, y1);
         tr = new Vector2(x2, y2);
@@ -464,17 +377,72 @@ public class OTView : MonoBehaviour
         Vector2 si = new Vector2(tr.x - bl.x, tr.y - bl.y);
         _worldRect = new Rect(
             camera.transform.position.x - si.x / 2,
-            ((OT.world == OT.World.WorldSide2D)?camera.transform.position.y:camera.transform.position.z) - si.y / 2,
+            camera.transform.position.y + si.y / 2,
             si.x,
-            si.y);
+            si.y * -1);
     }
 
-	void AdjustToWorldBounds()
-	{
+    // Update is called once per frame
+    /// <exclude />
+    public void Update()
+    {
+		if (!OT.isValid) return;
+        
+        if (Application.isEditor)
+        {
+            // aspect ration check - because it sometimes is forced back to 4:3 ???
+            float asp = (float)Screen.width / (float)Screen.height;
+            if (asp!=camera.aspect) return;
+            GetWorldRect();
+
+            if (_position_ == _position)
+            {
+                if (!Vector2.Equals((Vector2)camera.transform.position, _position))
+                {
+                    _position = camera.transform.position;
+                    _position_ = _position;
+                    transform.position = camera.transform.position;
+                }
+            }
+        }
+    
+        if (customSize != _customSize)
+        {
+            _customSize = customSize;
+            sizeFact = ((customSize / 300) / pixelPerfectResolution.y) * 600;
+        }
+
+        if (_zoom != zoom)
+            GetWorldRect();
+
+        if (customSize == 0)
+            sizeFact = 1;
+
+        if (forceOrthographic)
+        {
+            // check camera type
+            if (!camera.orthographic)
+                SetCamera();
+
+            // check camera size
+            if (camera.orthographicSize != resSize * (Mathf.Pow(2, _zoom * -1)))
+                camera.orthographicSize = resSize * Mathf.Pow(2, _zoom * -1);
+        }
+
+        if (Application.isEditor && (transform.position.x != _position.x || transform.position.y != _position.y) && _position == _position_)
+        {
+            camera.transform.position = new Vector3(transform.position.x, transform.position.y, cameraDepth);
+            _position = new Vector2(camera.transform.position.x, camera.transform.position.y);
+            _position_ = position;
+        }
+
+        Vector2 pos = OT.view.position;
+        if (OT.view.movementTarget != null)
+            pos = OT.view.movementTarget.transform.position;
+
         if (worldBounds.width != 0)
         {
-        	Vector2 pos = position;				
-            bool clampX = (Mathf.Abs(worldBounds.width) >= Mathf.Abs(worldRect.width));
+            bool clampX = (Mathf.Abs(worldBounds.width)>=Mathf.Abs(worldRect.width));
             if (clampX)
             {
                 float minX = _worldBounds.xMin;
@@ -514,309 +482,41 @@ public class OTView : MonoBehaviour
                 pos.y = (worldRect.yMin + worldRect.height / 2);
 
             position = pos;
-        }		
-	}
-	
-	bool getRect = false;
-	bool recordPrefab = false;
-	void EditorSettings()
-	{
-		if (camera == null)
-			return;
-				
-        // aspect ration check - because it sometimes is forced back to 4:3 ???
-        float asp = (float)Screen.width / (float)Screen.height;
-        if (asp!=camera.aspect) return;
-		
-		if (!Application.isPlaying)
-		{
-            if (_position_ == _position && OT.world2D)
+        }
+        else
+            position = pos;
+
+        // check camera position
+        if (_position_ != _position)
+        {
+            _position_ = _position;
+            if (camera.transform.position.x != _position.x || Camera.main.transform.position.y != _position.y || Camera.main.transform.position.z != cameraDepth)
             {
-				if (OT.world == OT.World.WorldSide2D)
-				{
-	                if (!Vector2.Equals((Vector2)camera.transform.position, _position))
-	                {
-						// camera has been moved manually
-	                    _position = camera.transform.position;
-	                    _position_ = _position;
-	                    transform.position = camera.transform.position;
-						UpdateWorldRect();
-						recordPrefab = true;
-						getRect = true;
-	                }
-					else
-			        if (transform.position.x != _position.x || transform.position.y != _position.y)
-			        {
-						// view object has been moved manually
-			            camera.transform.position = new Vector3(transform.position.x, transform.position.y, cameraDepth);
-			            _position = new Vector2(camera.transform.position.x, camera.transform.position.y);
-			            _position_ = position;
-						UpdateWorldRect();
-						recordPrefab = true;
-						getRect = true;
-			        }																			
-					
-					if (transform.position.z != cameraDepth)
-						transform.position = new Vector3(transform.position.x,transform.position.y, cameraDepth);
-					
-				}
-				else
-				{
-	                if (!Vector2.Equals(new Vector2(camera.transform.position.x,camera.transform.position.z) , _position))
-	                {
-						// camera has been moved manually
-	                    _position = new Vector2(camera.transform.position.x, camera.transform.position.z);
-	                    _position_ = _position;
-	                    transform.position = camera.transform.position;
-						UpdateWorldRect();
-						recordPrefab = true;
-						getRect = true;
-	                }
-					else
-			        if (transform.position.x != _position.x || transform.position.z != _position.y)
-			        {
-						// view object has been moved manually
-			            camera.transform.position = new Vector3(transform.position.x, cameraDepth, transform.position.z);
-			            _position = new Vector2(camera.transform.position.x, camera.transform.position.z);
-			            _position_ = position;
-						UpdateWorldRect();
-						recordPrefab = true;
-						getRect = true;
-			        }																			
-					if (transform.position.y != cameraDepth)
-						transform.position = new Vector3(transform.position.x, cameraDepth, transform.position.z);
-				}
-            }	
-			
-			if (_rotation_ == _rotation && OT.world2D)
-			{
-				if (OT.world == OT.World.WorldSide2D)
-				{
-					if (transform.rotation.eulerAngles.z != rotation)
-					{
-						// view object has been rotated manually in editor
-						rotation = transform.rotation.eulerAngles.z;
-						camera.transform.rotation = transform.rotation;
-						recordPrefab = true;			
-						getRect = true;
-					}
-					else
-					if (camera.transform.rotation.eulerAngles.z != rotation)
-					{
-						// camera has been rotated manually in editor
-						rotation = camera.transform.rotation.eulerAngles.z;
-						transform.rotation = camera.transform.rotation;
-						recordPrefab = true;						
-						getRect = true;
-					}
-				}	
-				else
-				{
-					if (transform.rotation.eulerAngles.y != rotation)
-					{
-						// view object has been rotated manually in editor
-						rotation = transform.rotation.eulerAngles.y;
-						camera.transform.rotation = transform.rotation;
-						recordPrefab = true;			
-						getRect = true;
-					}
-					else
-					if (camera.transform.rotation.eulerAngles.y != rotation)
-					{
-						// camera has been rotated manually in editor
-						rotation = camera.transform.rotation.eulerAngles.y;
-						transform.rotation = camera.transform.rotation;
-						recordPrefab = true;						
-						getRect = true;
-					}					
-				}
-			}	
-									
-		}				
-		
-        if (OT.world2D && !camera.orthographic)
-            SetCamera();
-		
-		
-		
-	}
-	
-	void UpdateWorldRect()
-	{
-		Vector2 dv = position - _worldRect.center;		
-		_worldRect.center = position;		
-		p1 += dv;
-		p2 += dv;
-		p3 += dv;
-		p4 += dv;
-	}
+                camera.transform.position = new Vector3(_position.x, _position.y, cameraDepth);
+                transform.position = camera.transform.position;
+                GetWorldRect();
+            }
+        }
 
-	void CheckViewSize()
-	{
-        // check camera size
-        if (camera.orthographicSize != resSize * (Mathf.Pow(2, _zoom * -1)))
-		{
-            camera.orthographicSize = resSize * Mathf.Pow(2, _zoom * -1);
-			GetWorldRect();
-		}		
-	}
-	
-    // Update is called once per frame
-    
-    public void Update()
-    {
-		if (!OT.isValid) return;
-        
-#if UNITY_EDITOR
-		EditorSettings();
-#endif
-		
-		// detect a screen size change
-		if (_currentScreen.x != Screen.width || _currentScreen.y != Screen.height)
-		{
-			getRect = true;
-			_currentScreen = new Vector2(Screen.width,Screen.height);
-            camera.orthographicSize = resSize * Mathf.Pow(2, _zoom * -1);			
-			_zoom_ = _zoom;
-			if (onScreenChange!=null)
-				onScreenChange();
-		}
-		
-		
-		if (customSize!=0)
-		{
-	        if (customSize != _customSize)
-	        {
-	            _customSize = customSize;
-            	sizeFact = (customSize / pixelPerfectResolution.y) * 2;
-	        }
-		}
-		else
-          	sizeFact = 1;
-						
-		if (_zoom_ != _zoom || !Application.isPlaying)
-		{
-			getRect = true;
-			_zoom_ = _zoom;
-			CheckViewSize();
-		}
-		
-	
-		if (Application.isPlaying && OT.world2D)
-		{
-			// check movement and rotation targets			
-	        if (movementTarget != null)
-			{
-				Vector2 targetPos;
-				if (movementObject!=null)
-					targetPos = movementObject.position;
-				else
-				{
-					if (OT.world == OT.World.WorldTopDown2D)
-						targetPos = new Vector2(movementTarget.transform.position.x,movementTarget.transform.position.z);
-					else
-						targetPos = movementTarget.transform.position;				
-				}
-				
-				if (!position.Equals(targetPos))
-				{
-					position = targetPos;
-					UpdateWorldRect();
-					if (onScreenChange!=null)
-						onScreenChange();					
-				}
-			}	
-	        if (rotationTarget != null)
-			{
-				if (OT.world == OT.World.WorldSide2D && rotationTarget.transform.eulerAngles.z!=rotation)
-	            	rotation = rotationTarget.transform.eulerAngles.z;
-				else
-				if (OT.world == OT.World.WorldTopDown2D && rotationTarget.transform.eulerAngles.y!=rotation)
-	            	rotation = rotationTarget.transform.eulerAngles.y;
-			}
-		}
+        if (OT.view.rotationTarget != null)
+           OT.view.rotation = OT.view.rotationTarget.transform.eulerAngles.z;
 
-		if (_rotation_!=rotation && OT.world2D)
-		{
-			_rotation_ = rotation;
-	        // match camera rotation with view rotation
-			if (OT.world == OT.World.WorldSide2D)
-			{
-		        if (camera.transform.eulerAngles.z != rotation)
-		        {
-		            camera.transform.eulerAngles = new Vector3(0, 0, rotation);
-		            transform.rotation = camera.transform.rotation;
-					getRect = true;
-		        }			
-			}
-			else
-			{
-		        if (camera.transform.eulerAngles.y != rotation)
-		        {
-		            camera.transform.eulerAngles = new Vector3(90, rotation,0);
-		            transform.rotation = camera.transform.rotation;
-					getRect = true;
-		        }			
-			}
-		}
-		
-		if (getRect || _position_ != _position)
-		{
-			GetWorldRect();
-			getRect = false;
-			AdjustToWorldBounds();
-	        if (_position_ != _position && OT.world2D)
-	        {
-	            _position_ = _position;
-				if (OT.world == OT.World.WorldSide2D)
-				{
-		            if (camera.transform.position.x != _position.x || camera.transform.position.y != _position.y || camera.transform.position.z != cameraDepth)
-		            {
-				        // match camera and view postion
-		                camera.transform.position = new Vector3(_position.x, _position.y, cameraDepth);
-		                transform.position = camera.transform.position;
-		            }
-				}
-				else
-				{
-		            if (camera.transform.position.x != _position.x || camera.transform.position.z != _position.y || camera.transform.position.y != cameraDepth)
-		            {
-				        // match camera and view postion
-		                camera.transform.position = new Vector3(_position.x, cameraDepth, _position.y);
-		                transform.position = camera.transform.position;
-		            }
-				}				
-				UpdateWorldRect();
-	        }
-		}
-		
-#if UNITY_EDITOR
-		if (recordPrefab && !Application.isPlaying)
-		{
-			UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(this);
-			recordPrefab = false;
-		}
-#endif		
-				
+        // check camera position
+        if (camera.transform.eulerAngles.z != _rotation)
+        {
+            camera.transform.eulerAngles = new Vector3(0, 0, _rotation);
+            transform.rotation = camera.transform.rotation;
+        }
+
     }
 
     void DrawRect(Rect r, Color c)
-    {		
+    {
         Gizmos.color = c;
-		if (OT.world == OT.World.WorldSide2D)
-		{
-	        Gizmos.DrawLine(new Vector3(r.xMin, r.yMin, 900), new Vector3(r.xMax, r.yMin, 900));
-	        Gizmos.DrawLine(new Vector3(r.xMin, r.yMin, 900), new Vector3(r.xMin, r.yMax, 900));
-	        Gizmos.DrawLine(new Vector3(r.xMax, r.yMin, 900), new Vector3(r.xMax, r.yMax, 900));
-	        Gizmos.DrawLine(new Vector3(r.xMin, r.yMax, 900), new Vector3(r.xMax, r.yMax, 900));
-		}
-		else
-		{
-	        Gizmos.DrawLine(new Vector3(r.xMin, -900, r.yMin), new Vector3(r.xMax, -900, r.yMin));
-	        Gizmos.DrawLine(new Vector3(r.xMin, -900, r.yMin), new Vector3(r.xMin, -900, r.yMax));
-	        Gizmos.DrawLine(new Vector3(r.xMax, -900, r.yMin), new Vector3(r.xMax, -900, r.yMax));
-	        Gizmos.DrawLine(new Vector3(r.xMin, -900, r.yMax), new Vector3(r.xMax, -900, r.yMax));
-		}
+        Gizmos.DrawLine(new Vector3(r.xMin, r.yMin, 900), new Vector3(r.xMax, r.yMin, 900));
+        Gizmos.DrawLine(new Vector3(r.xMin, r.yMin, 900), new Vector3(r.xMin, r.yMax, 900));
+        Gizmos.DrawLine(new Vector3(r.xMax, r.yMin, 900), new Vector3(r.xMax, r.yMax, 900));
+        Gizmos.DrawLine(new Vector3(r.xMin, r.yMax, 900), new Vector3(r.xMax, r.yMax, 900));
     }
 
     void DrawView(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, Color c)
@@ -833,65 +533,31 @@ public class OTView : MonoBehaviour
         return new Color(c.r * 0.5f, c.g * 0.5f, c.b * 0.5f);
     }
 
-    
+    /// <exclude />
     protected void OnDrawGizmos()
     {
-		if (OT.world3D)
-			return;
-		
         if (drawGizmos)
         {
             DrawRect(worldBounds, Darker(gizmosColor));
             Rect r = worldRect;
-			
-			if (OT.world == OT.World.WorldSide2D)
-			{
-		        Vector3 gp1 = new Vector3(p1.x, p1.y, 900);
-		        Vector3 gp2 = new Vector3(p2.x, p2.y, 900);
-		        Vector3 gp3 = new Vector3(p3.x, p3.y, 900);
-		        Vector3 gp4 = new Vector3(p4.x, p4.y, 900);
-												
-	            DrawView(gp1, gp2, gp3, gp4, Darker(gizmosColor));
-					
-	            gp1 = new Vector3(r.xMin, r.yMin, 900);
-	            gp2 = new Vector3(r.xMax, r.yMin, 900);
-	            gp3 = new Vector3(r.xMin, r.yMax, 900);
-	            gp4 = new Vector3(r.xMax, r.yMax, 900);
-				
-            	DrawView(gp1,gp2,gp3,gp4, gizmosColor);
-			}
-			else
-			{
-		        Vector3 gp1 = new Vector3(p1.x, -900, p1.y);
-		        Vector3 gp2 = new Vector3(p2.x, -900, p2.y);
-		        Vector3 gp3 = new Vector3(p3.x, -900, p3.y);
-		        Vector3 gp4 = new Vector3(p4.x, -900, p4.y);
-				
-	            DrawView(gp1, gp2, gp3, gp4, Darker(gizmosColor));
-					
-	            gp1 = new Vector3(r.xMin, -900, r.yMin);
-	            gp2 = new Vector3(r.xMax, -900, r.yMin);
-	            gp3 = new Vector3(r.xMin, -900, r.yMax);
-	            gp4 = new Vector3(r.xMax, -900, r.yMax);
-				
-            	DrawView(gp1,gp2,gp3,gp4, gizmosColor);
-			}
+            Vector3 p = (Vector3)position;
 
+            DrawView(p1, p2, p3, p4, Darker(gizmosColor));
+
+            Vector3 gp1 = new Vector3(r.xMin, r.yMin, 900) - p;
+            Vector3 gp2 = new Vector3(r.xMax, r.yMin, 900) - p;
+            Vector3 gp3 = new Vector3(r.xMin, r.yMax, 900) - p;
+            Vector3 gp4 = new Vector3(r.xMax, r.yMax, 900) - p;
+
+            DrawView(gp1 + p,gp2 + p,gp3 + p,gp4 + p, gizmosColor);
         }
     }
 
-#if UNITY_EDITOR	
-    void OnGUI()
-    {
-		if (!OT.isValid || OT.view == null)
-			return;
-		
-		// we have to calculate the right Orthographic size because we
-		// coud be in edit mode and just captured the right screen dimensions
-		if (!Application.isPlaying)
-			CheckViewSize();
-        // GUI.Box(new Rect((Screen.width / 2) - 50, (Screen.height / 2) - 50, 100, 100), "");
-    }
-#endif
+
+
+    //void OnGUI()
+    //{
+    //    GUI.Box(new Rect((Screen.width / 2) - 50, (Screen.height / 2) - 50, 100, 100), "");
+    //}
 
 }

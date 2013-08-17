@@ -24,9 +24,11 @@
 using UnityEngine;
 using System.Collections;
 
+/// <exclude />
 public class OTEaseBounceInOut : OTEase {
     OTEaseBounceOut easeOut = new OTEaseBounceOut();
     OTEaseBounceIn easeIn = new OTEaseBounceIn();
+    /// <exclude />
     public override float ease(float t, float b, float c, float d)
     {
         if (t < d / 2) return easeIn.ease(t * 2, 0, c, d) * .5f + b;

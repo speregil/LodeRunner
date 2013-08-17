@@ -21,6 +21,7 @@
 // ------------------------------------------------------------------------
 
 /*
+
 private var runningTween:OTTween = null;
 private var tween:OTTween = null;
 function OnMouseEnter()
@@ -51,4 +52,5 @@ function OnTweenFinish(tween:OTTween)
     else
         runningTween = null;        
 }
+
 */

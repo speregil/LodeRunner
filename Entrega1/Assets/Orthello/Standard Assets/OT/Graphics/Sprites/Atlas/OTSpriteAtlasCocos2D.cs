@@ -70,75 +70,53 @@ public class OTSpriteAtlasCocos2D : OTSpriteAtlasImportXML
     /// </summary>
     protected override OTAtlasData[] Import()
     {
-		
         if (!ValidXML())
             return new OTAtlasData[] { };
 
         List<OTAtlasData> data = new List<OTAtlasData>();
         if (xml.DocumentElement.Name == "plist")
         {
-            XmlNodeList nodeList = xml.DocumentElement.SelectNodes("dict/key");
-			for (int i=0; i<nodeList.Count; i++)
-			{
-				XmlNode frames = nodeList[i];
-	            if (frames != null && frames.InnerText == "frames")
-	            {
-	                XmlNodeList subTextureNames = xml.DocumentElement.SelectNodes("dict/dict/key");
-	                XmlNodeList subTextures = xml.DocumentElement.SelectNodes("dict/dict/dict");
-	                try
-	                {
-	                    for (int si = 0; si < subTextures.Count; si++)
-	                    {
-	                        subTexture = subTextures[si];
-	                        OTAtlasData ad = new OTAtlasData();
-	
-	                        bool rotated = GetBool("rotated");
-	                        Rect frame = GetRect("frame");
-	                        Rect colorRect = GetRect("sourceColorRect");
-	                        Vector2 sourceSize = GetVector2("sourceSize");
-	                        try
-	                        {
-	                            ad.name = subTextureNames[si].InnerText.Split('.')[0];
-	                        }
-	                        catch (System.Exception)
-	                        {
-	                            ad.name = subTextureNames[si].InnerText;
-	                        }
-	                        ad.position = new Vector2(frame.xMin, frame.yMin);
-	                        if (rotated)
-	                            ad.rotated = true;
-	
-	                        ad.size = new Vector2(colorRect.width, colorRect.height);
-	                        ad.frameSize = sourceSize;
-	                        ad.offset = new Vector2(colorRect.xMin, colorRect.yMin);
-	
-	                        data.Add(ad);
-	                    }
-	                }
-	                catch (System.Exception ERR)
-	                {
-	                    Debug.LogError("Orthello : Cocos2D Atlas Import error!");
-	                    Debug.LogError(ERR.Message);
-	                }
-	            }
-				else
-	            if (frames != null && frames.InnerText == "metadata")
-	            {
-					XmlNode sizeNode = frames.NextSibling.SelectSingleNode("key[text()=\"size\"]");
-					if (sizeNode!=null)
-						sheetSize = StringToVector2(sizeNode.NextSibling.InnerText);
-					
-					XmlNode nameNode = frames.NextSibling.SelectSingleNode("key[text()=\"realTextureFileName\"]");
-					if (nameNode==null)
-						nameNode = frames.NextSibling.SelectSingleNode("key[text()=\"textureFileName\"]");
-					if (nameNode!=null)
-					{
-						string[] sa = nameNode.NextSibling.InnerText.Split('.');
-						if (sa.Length>0)
-							name = sa[0];
-					}
-				}
-			}
+            XmlNode frames = xml.DocumentElement.SelectSingleNode("dict/key");
+            if (frames != null && frames.InnerText == "frames")
+            {
+                XmlNodeList subTextureNames = xml.DocumentElement.SelectNodes("dict/dict/key");
+                XmlNodeList subTextures = xml.DocumentElement.SelectNodes("dict/dict/dict");
+                try
+                {
+                    for (int si = 0; si < subTextures.Count; si++)
+                    {
+                        subTexture = subTextures[si];
+                        OTAtlasData ad = new OTAtlasData();
+
+                        bool rotated = GetBool("rotated");
+                        Rect frame = GetRect("frame");
+                        Rect colorRect = GetRect("sourceColorRect");
+                        Vector2 sourceSize = GetVector2("sourceSize");
+                        try
+                        {
+                            ad.name = subTextureNames[si].InnerText.Split('.')[0];
+                        }
+                        catch (System.Exception)
+                        {
+                            ad.name = subTextureNames[si].InnerText;
+                        }
+                        ad.position = new Vector2(frame.xMin, frame.yMin);
+                        if (rotated)
+                            ad.rotated = true;
+
+                        ad.size = new Vector2(colorRect.width, colorRect.height);
+                        ad.frameSize = sourceSize;
+                        ad.offset = new Vector2(colorRect.xMin, colorRect.yMin);
+
+                        data.Add(ad);
+                    }
+                }
+                catch (System.Exception ERR)
+                {
+                    Debug.LogError("Orthello : Cocos2D Atlas Import error!");
+                    Debug.LogError(ERR.Message);
+                }
+            }
         }
         return data.ToArray();
     }
