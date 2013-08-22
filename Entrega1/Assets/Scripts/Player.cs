@@ -51,6 +51,11 @@ public class Player : Character {
 		if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.E)) 
 		{ isShoot = true; }	
 		
+		if(Input.GetKey(KeyCode.LeftControl))
+		{ 
+			reverse = !reverse;
+		}
+		
 		UpdateMovement();
 		
 		// shoot
@@ -113,6 +118,5 @@ public class Player : Character {
 			}
 		}
 	}
-	
 	
 }

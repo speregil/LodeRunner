@@ -7,7 +7,7 @@
             <key>brick-break0.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{0,0},{30,30}}</string>
+                <string>{{2,2},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -20,7 +20,7 @@
             <key>brick-break1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{30,0},{30,30}}</string>
+                <string>{{34,2},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -33,7 +33,7 @@
             <key>brick-break2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{60,0},{30,30}}</string>
+                <string>{{66,2},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -46,7 +46,7 @@
             <key>brick-break3.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{90,0},{30,30}}</string>
+                <string>{{98,2},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -59,7 +59,7 @@
             <key>brick-break4.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{0,30},{30,30}}</string>
+                <string>{{130,2},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -72,7 +72,7 @@
             <key>brick-break5.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{30,30},{30,30}}</string>
+                <string>{{162,2},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -85,7 +85,7 @@
             <key>brick-break6.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{60,30},{30,30}}</string>
+                <string>{{194,2},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -98,7 +98,7 @@
             <key>brick-fill0.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{90,30},{30,30}}</string>
+                <string>{{2,34},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -111,7 +111,7 @@
             <key>brick-fill1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{0,60},{30,30}}</string>
+                <string>{{34,34},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -124,7 +124,7 @@
             <key>brick-fill2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{30,60},{30,30}}</string>
+                <string>{{66,34},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -137,7 +137,7 @@
             <key>brick-fill3.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{60,60},{30,30}}</string>
+                <string>{{98,34},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -150,7 +150,7 @@
             <key>brick-fill4.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{90,60},{30,30}}</string>
+                <string>{{130,34},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -163,7 +163,7 @@
             <key>brick-fill5.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{0,90},{30,30}}</string>
+                <string>{{162,34},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -176,7 +176,20 @@
             <key>brick-fill6.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{30,90},{30,30}}</string>
+                <string>{{194,34},{30,30}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{30,30}}</string>
+                <key>sourceSize</key>
+                <string>{30,30}</string>
+            </dict>
+            <key>brick-fill7.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{2,66},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -189,7 +202,7 @@
             <key>brick-solid.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{60,90},{30,30}}</string>
+                <string>{{34,66},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -202,7 +215,7 @@
             <key>ladder-30x30.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{90,90},{30,30}}</string>
+                <string>{{66,66},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -215,7 +228,7 @@
             <key>pickup.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{0,120},{30,30}}</string>
+                <string>{{98,66},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -228,7 +241,7 @@
             <key>rope.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{30,120},{30,30}}</string>
+                <string>{{130,66},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -241,7 +254,7 @@
             <key>shoot0.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{60,120},{30,30}}</string>
+                <string>{{162,66},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -254,7 +267,7 @@
             <key>shoot1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{90,120},{30,30}}</string>
+                <string>{{194,66},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -267,7 +280,7 @@
             <key>shoot2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{0,150},{30,30}}</string>
+                <string>{{2,98},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -280,7 +293,7 @@
             <key>shoot3.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{30,150},{30,30}}</string>
+                <string>{{34,98},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -293,7 +306,7 @@
             <key>shoot4.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{60,150},{30,30}}</string>
+                <string>{{66,98},{30,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -311,9 +324,9 @@
             <key>realTextureFileName</key>
             <string>level.png</string>
             <key>size</key>
-            <string>{128,256}</string>
+            <string>{256,256}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:517ed594a353414d7c3c19ef31b26865$</string>
+            <string>$TexturePacker:SmartUpdate:19698f032b4cf761f80eb825d395e800:1/1$</string>
             <key>textureFileName</key>
             <string>level.png</string>
         </dict>

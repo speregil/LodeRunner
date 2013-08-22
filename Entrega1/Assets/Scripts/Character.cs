@@ -7,6 +7,7 @@ public class Character : MonoBehaviour {
 	public bool blockedLeft = false;
 	public bool blockedUp = false;
 	public bool blockedDown = false;
+	public bool reverse = false;
 	
 	public bool isLeft;
 	public bool isRight;
@@ -26,7 +27,7 @@ public class Character : MonoBehaviour {
 
 	public float playerHitboxX = 0.225f; // player x = 0.45
 	public  float playerHitboxY = 0.5f; // 0.5 is correct for ladders while player actual y = 0.6
-	
+	public float reverseplayerHitboxY = 0.0f;
 	
 	public  Vector3 glx;
 	
@@ -127,7 +128,10 @@ public class Character : MonoBehaviour {
 		// player is falling so apply gravity
 		else 
 		{
-			movement = new Vector3(0f,-1f,0f);
+			float dir;
+			if(reverse){dir = 1f;}
+			else{dir = -1f;}
+			movement = new Vector3(0f,dir,0f);
 			movement *= Time.deltaTime*gravitySpeed;
 			thisTransform.Translate(0f,movement.y, 0f);
 		}
@@ -145,6 +149,7 @@ public class Character : MonoBehaviour {
 		
 		// is the player is standing on the ground?
 		// cast 2 rays, one on each side of the character
+		if(!reverse){
 		if (Physics.Raycast(new Vector3(thisTransform.position.x-0.3f,thisTransform.position.y,thisTransform.position.z+1f), -Vector3.up, out hit, 0.7f, xa.groundMask | xa.enemyMask) || Physics.Raycast(new Vector3(thisTransform.position.x+0.3f,thisTransform.position.y,thisTransform.position.z+1f), -Vector3.up, out hit, 0.7f, xa.groundMask | xa.enemyMask))
 		{	
 			falling = false;
@@ -154,6 +159,7 @@ public class Character : MonoBehaviour {
 			{
 				thisTransform.position = new Vector3(thisTransform.position.x, hit.point.y + playerHitboxY, thisTransform.position.z);
 			}
+				
 		}
 		
 		// then maybe she's falling
@@ -162,6 +168,33 @@ public class Character : MonoBehaviour {
 			if(!onRope && !falling && !onLadder) {
 				falling = true;
 			}
+		}
+		}
+		else{
+		if (Physics.Raycast(new Vector3(thisTransform.position.x-0.3f,thisTransform.position.y,thisTransform.position.z+1f), Vector3.up, out hit, 0.7f, xa.groundMask | xa.enemyMask) || Physics.Raycast(new Vector3(thisTransform.position.x+0.3f,thisTransform.position.y,thisTransform.position.z+1f), Vector3.up, out hit, 0.7f, xa.groundMask | xa.enemyMask))
+		{	
+			falling = false;
+			
+			// snap the player to the top of a ground tile if she's not on a ladder
+			if(!onLadder)
+			{
+				//if(!reverse){
+					//thisTransform.position = new Vector3(thisTransform.position.x, hit.point.y + playerHitboxY, thisTransform.position.z);
+				//}
+				//else{
+					//thisTransform.position = new Vector3(thisTransform.position.x, hit.point.y + reverseplayerHitboxY, thisTransform.position.z);
+				//}
+			}
+				
+		}
+		
+		// then maybe she's falling
+		else
+		{
+			if(!onRope && !falling && !onLadder) {
+				falling = true;
+			}
+		}
 		}
 		
 		// player is blocked by something on the right
